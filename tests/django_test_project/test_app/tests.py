@@ -1,16 +1,15 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
+import json
+from django.contrib.auth.models import User
 from django.test import TestCase
+from django.test.client import Client
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class AutocompleteTest(TestCase):
+    def setUp(self):
+        super(AutocompleteTest, self).setUp()
+        self.client = Client()
+    
+    def test_search(self):
+       response = self.client.get("/yaaac/7/search/?query=gene") 
+       self.assertEqual(json.loads(response.content),
+                        {u'data': [1], u'query': u'gene', u'suggestions': [u'Genesis']})

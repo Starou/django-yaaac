@@ -1,0 +1,66 @@
+[
+{
+  "pk": 1, 
+  "model": "auth.user", 
+  "fields": {
+    "username": "super", 
+    "first_name": "", 
+    "last_name": "", 
+    "is_active": true, 
+    "is_superuser": true, 
+    "is_staff": true, 
+    "groups": [], 
+    "user_permissions": [], 
+    "password": "pbkdf2_sha256$10000$IqJ553ehozEs$ANFweXaGqExj3D0BBODGbH5ZQ7idUznRUb6PoeIM+1g=", 
+    "email": "super@foo.org", 
+    "date_joined": "2013-09-23T14:46:14.468Z"
+  }
+},
+{
+  "pk": 1, 
+  "model": "test_app.band", 
+  "fields": {
+    "name": "Genesis"
+  }
+},
+{
+  "pk": 2, 
+  "model": "test_app.band", 
+  "fields": {
+    "name": "The Rolling Stones"
+  }
+},
+{
+  "pk": 1, 
+  "model": "test_app.bandmember", 
+  "fields": {
+    "band": [
+      "Genesis"
+    ], 
+    "first_name": "Phil", 
+    "last_name": "Collins"
+  }
+},
+{
+  "pk": 2, 
+  "model": "test_app.bandmember", 
+  "fields": {
+    "band": [
+      "Genesis"
+    ], 
+    "first_name": "Peter", 
+    "last_name": "Gabriel"
+  }
+},
+{
+  "pk": 3, 
+  "model": "test_app.bandmember", 
+  "fields": {
+    "band": [
+      "Genesis"
+    ], 
+    "first_name": "Tony", 
+    "last_name": "Banks"
+  }
+}
+]
