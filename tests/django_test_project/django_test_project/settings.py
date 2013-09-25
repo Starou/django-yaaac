@@ -1,4 +1,5 @@
 # Django settings for django_test_project project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -102,10 +103,12 @@ ROOT_URLCONF = 'django_test_project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'django_test_project.wsgi.application'
 
+PROJECT_ROOT = os.path.abspath(os.path.split(__file__)[0])
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+     os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
