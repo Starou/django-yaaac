@@ -12,8 +12,14 @@ class AutocompleteWidget(forms.HiddenInput):
     is_hidden = False
 
     class Media:
+        css = {
+            'all': (
+                static('django_yaaac/css/autocomplete.css'),
+            )
+        }
         js = (
             static('django_yaaac/js/jquery.autocomplete.min.js'),
+            static('django_yaaac/js/yaaac_autocomplete.js'),
         )
 
     def render(self, name, value, attrs=None):
