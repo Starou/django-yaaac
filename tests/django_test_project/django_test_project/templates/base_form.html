@@ -1,5 +1,9 @@
-<!DOCTYPE html>
+{% load static from staticfiles %}<!DOCTYPE html>
 <html>
+  <head>
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+    {{ form.media }}
+  </head>
   <body>
     <form>
       <table>

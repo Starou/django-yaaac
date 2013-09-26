@@ -8,7 +8,6 @@ from django import VERSION as DJ_VERSION
 class AutocompleteModelChoiceField(ModelChoiceField):
     widget = AutocompleteWidget
 
-    # TODO: passer admin_site en params.
     def __init__(self, site, queryset, empty_label="---------", cache_choices=False,
                  required=True, widget=None, label=None, initial=None,
                  help_text='', to_field_name=None, *args, **kwargs):

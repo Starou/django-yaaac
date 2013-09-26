@@ -6,5 +6,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^yaaac/', include(yaaac.autocomplete.urls)),
-    url(r'^band-member-form/', "test_app.views.band_member_form"),
+    url(r'^$', "test_app.views.band_member_form"),
 )
