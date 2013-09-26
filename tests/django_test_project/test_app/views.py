@@ -8,6 +8,9 @@ from test_app import models
 class BandMemberForm(forms.ModelForm):
     band = AutocompleteModelChoiceField(site=admin.site, 
                                         queryset=models.Band.objects.all(),
+                                        yaaac_opts={
+                                            "value_attr": "name"
+                                        },
                                         required=True)
     class Meta:
         model = models.BandMember

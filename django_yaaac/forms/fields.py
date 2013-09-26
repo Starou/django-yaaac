@@ -8,9 +8,9 @@ from django import VERSION as DJ_VERSION
 class AutocompleteModelChoiceField(ModelChoiceField):
     widget = AutocompleteWidget
 
-    def __init__(self, site, queryset, empty_label="---------", cache_choices=False,
-                 required=True, widget=None, label=None, initial=None,
-                 help_text='', to_field_name=None, *args, **kwargs):
+    def __init__(self, site, queryset, yaaac_opts, empty_label="---------",
+                 cache_choices=False, required=True, widget=None, label=None,
+                 initial=None, help_text='', to_field_name=None, *args, **kwargs):
         app_label = queryset.model._meta.app_label
         if DJ_VERSION < (1, 6):
             info = (app_label, queryset.model._meta.module_name)
@@ -23,6 +23,7 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         content_type_id = ContentType.objects.get_for_model(queryset.model).id
         self.search_url = reverse_lazy("yaaac:search",
                                        kwargs={"content_type_id": content_type_id})
+        self.value_attr = yaaac_opts["value_attr"]
         ModelChoiceField.__init__(self, queryset, empty_label, cache_choices,
                                   required, widget, label, initial, help_text,
                                   to_field_name, *args, **kwargs)
@@ -32,5 +33,6 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         attrs.update({
             'search_url': self.search_url,
             'lookup_url': self.lookup_url, 
+            'value_attr': self.value_attr, 
         })
         return attrs

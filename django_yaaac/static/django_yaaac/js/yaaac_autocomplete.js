@@ -5,6 +5,9 @@ $(document).ready(function() {
             serviceUrl: $id_input.attr("search_url"),
             onSelect: function(suggestion) {
                 $id_input.val(suggestion.data);
+            },
+            params: {
+                value_attr: $id_input.attr("value_attr")
             }
         };
         $input = $(this).autocomplete(options);
