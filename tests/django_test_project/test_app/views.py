@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django_yaaac.forms.fields import AutocompleteModelChoiceField
@@ -16,9 +17,15 @@ class BandMemberForm(forms.ModelForm):
         model = models.BandMember
 
 
-def band_member_form(request):
-    form = BandMemberForm
+def band_member_form(request, member_id=None):
+    band_member = None
+    if member_id:
+        band_member = models.BandMember.objects.get(pk=member_id)
+    form = BandMemberForm(request.POST or None, instance=band_member)
+    if request.method == 'POST':
+        band_member = form.save()
+        return HttpResponseRedirect("/%s/" % band_member.pk)
     return render_to_response('base_form.html', {
         'form': form,
-        'title': "Form"
+        'title': "Add a band member"
     }, context_instance=RequestContext(request))

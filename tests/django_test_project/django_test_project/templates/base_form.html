@@ -5,9 +5,13 @@
     {{ form.media }}
   </head>
   <body>
+    <h1>{{ title }}</h1>
     <form>
       <table>
-      {{ form.as_table }}
+        {{ form.as_table }}
+        <tr>
+          <th></th><td><input type="submit"></input></td>
+        </tr>
       </table>
     </form>
   </body>
