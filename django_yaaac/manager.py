@@ -23,6 +23,12 @@ class AutocompleteManager(object):
 
         query = request.GET.get('query')
         value_attr = request.GET.get('value_attr')
+        pk = request.GET.get('pk')
+        if pk:
+            return json_response({
+                "value": unicode(klass.objects.get(pk=pk))
+            })
+
         result = klass.objects.filter(**{"%s__istartswith" % value_attr: query}
                                      ).values_list('id', value_attr) or [('', '')]
         suggestions = [{"value": r[1], "data": r[0]} for r in result]
