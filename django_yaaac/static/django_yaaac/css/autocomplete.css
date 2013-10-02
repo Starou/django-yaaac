@@ -2,3 +2,18 @@
 .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #F0F0F0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+
+.yaaac_value_container {
+    background-color: #E0EEEE;
+    border-radius: 8px;
+    padding: 2px 0 2px 5px;
+    font-weight: bold;
+}
+.yaaac_clear_value {
+    color: white;
+    background-color: #C2CDCD;
+    border-radius: 0 8px 8px 0;
+    padding: 2px 4px;
+    margin-left: 4px;
+    cursor: pointer;
+}
