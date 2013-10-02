@@ -27,6 +27,7 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         ModelChoiceField.__init__(self, queryset, empty_label, cache_choices,
                                   required, widget, label, initial, help_text,
                                   to_field_name, *args, **kwargs)
+        self.widget.model = queryset.model
 
     def widget_attrs(self, widget):
         attrs = super(AutocompleteModelChoiceField, self).widget_attrs(widget)
@@ -34,5 +35,6 @@ class AutocompleteModelChoiceField(ModelChoiceField):
             'search_url': self.search_url,
             'lookup_url': self.lookup_url, 
             'value_attr': self.value_attr, 
+            'class': 'yaaac_pk',
         })
         return attrs
