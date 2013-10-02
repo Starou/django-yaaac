@@ -31,6 +31,13 @@
   }
 },
 {
+  "pk": 3, 
+  "model": "test_app.band", 
+  "fields": {
+    "name": "The Stone Roses"
+  }
+},
+{
   "pk": 1, 
   "model": "test_app.bandmember", 
   "fields": {
