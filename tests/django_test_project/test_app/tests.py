@@ -15,6 +15,9 @@ class AutocompleteTest(TestCase):
        self.assertEqual(json.loads(response.content),
                         {u'query': u'gene', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
+    def test_search_with_pk(self):
+       response = self.client.get("/yaaac/7/search/?pk=1") 
+       self.assertEqual(json.loads(response.content), {'value': 'Genesis'})
 
 class LiveServerTest(LiveServerTestCase):
     @classmethod
