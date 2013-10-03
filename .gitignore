@@ -1,2 +1,4 @@
 *.swp
 *.pyc
+*.sqlite
+*.DS_Store
