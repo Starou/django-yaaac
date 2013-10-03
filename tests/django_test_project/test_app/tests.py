@@ -97,6 +97,12 @@ class YaaacLiveServerTest(LiveServerTest):
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
+        # Clear the choice.
+        self.selenium.find_element_by_class_name('yaaac_clear_value').click()
+        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "")
+        self.assertTrue(band_search_elem.is_displayed())
+        self.assertFalse(band_value_container.is_displayed())
+
     def test_foreign_key_autocomplete_with_initial(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger", band_id=2)
         self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
