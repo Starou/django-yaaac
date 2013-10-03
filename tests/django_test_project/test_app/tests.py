@@ -29,8 +29,8 @@ class LiveServerTest(LiveServerTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super(LiveServerTest, cls).tearDownClass()
         cls.selenium.quit()
+        super(LiveServerTest, cls).tearDownClass()
 
     def setUp(self):
         super(LiveServerTest, self).setUp()
@@ -44,6 +44,7 @@ class LiveServerTest(LiveServerTestCase):
 
         self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        self.assertTrue(band_search_elem.is_displayed())
         band_search_elem.send_keys("the ")
         self.wait_for_ajax()
         suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
@@ -59,3 +60,23 @@ class LiveServerTest(LiveServerTestCase):
         self.assertTrue(band_value_container.is_displayed())
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
+
+    def test_foreign_key_autocomplete_with_initial(self):
+        mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger", band_id=2)
+
+        # The autocomplete field is not visible.
+        self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
+        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        self.assertFalse(band_search_elem.is_displayed())
+
+        # But the label is.
+        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        self.assertTrue(band_value_container.is_displayed())
+        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        self.assertEqual(band_value_elem.text, "The Rolling Stones")
+
+    def test_foreign_key_related_lookup(self):
+        mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
+
+        self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.find_element_by_class_name('yaaac_lookup').click()
