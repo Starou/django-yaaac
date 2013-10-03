@@ -38,6 +38,13 @@
   }
 },
 {
+  "pk": 4, 
+  "model": "test_app.band", 
+  "fields": {
+    "name": "SuperHeavy"
+  }
+},
+{
   "pk": 1, 
   "model": "test_app.bandmember", 
   "fields": {
