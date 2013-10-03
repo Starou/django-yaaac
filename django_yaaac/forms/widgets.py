@@ -12,6 +12,7 @@ from django.utils.text import Truncator
 class AutocompleteWidget(forms.HiddenInput):
     is_hidden = False
     model = None
+    lookup_url = ""
 
     class Media:
         css = {
@@ -31,8 +32,19 @@ class AutocompleteWidget(forms.HiddenInput):
                                               "class": "yaaac_search_input",
                                               "placeholder": "start typing to search",
                                               "style": value and "display:none" or ""}))
-        return format_html('<span class="yaaac_container">{0}{1}{2}</span>',
-                           hidden_input, autocomp_input, self.value_elem(value))
+        lookup_elem = format_html('<a {0}><img {1}></img></a>',
+                                  # FIXME: t=id is hardcoded and that's bad.
+                                  # Should do something like in ForeignKeyRawIdWidget.url_parameters()
+                                  # to filter on rel.limit_choices_to and self.limit_choices_to.
+                                  flatatt({"href": "%s?t=id" % self.lookup_url,
+                                           "id": "lookup_id_%s" % name,
+                                           "class": "yaaac_lookup",
+                                          "style": value and "display:none" or ""}),
+                                  flatatt({"width": "16", "height": "16", "alt": "Lookup",
+                                           "src": static('django_yaaac/img/selector-search.gif')}))
+        
+        return format_html('<span class="yaaac_container">{0}{1}{2}{3}</span>',
+                           hidden_input, autocomp_input, lookup_elem, self.value_elem(value))
 
     def value_elem(self, value):
         style = 'display:none'
