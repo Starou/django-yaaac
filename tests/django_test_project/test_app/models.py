@@ -28,7 +28,7 @@ class BandMember(models.Model):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    band = models.ForeignKey("Band")
+    band = models.ForeignKey("Band", null=True, blank=True)
 
     class Meta:
         unique_together = (('first_name', 'last_name'),)
