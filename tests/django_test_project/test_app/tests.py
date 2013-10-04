@@ -128,6 +128,33 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
         
+        band_link = self.selenium.find_element_by_xpath("//tr[2]//a")
+        self.assertEqual(band_link.text, "SuperHeavy")
+        band_link.click()
+        self.selenium.switch_to_window(main_window)
+        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
+
+        # The autocomplete field is now hidden.
+        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        self.assertFalse(band_search_elem.is_displayed())
+
+        # And the label is shown.
+        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        self.assertTrue(band_value_container.is_displayed())
+        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        self.assertEqual(band_value_elem.text, "SuperHeavy")
+
+    def test_foreign_key_limit_choices_related_lookup(self):
+        self.admin_login("super", "secret", login_url='/admin/')
+        mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
+
+        self.selenium.get('%s/band-member-form/limit-choices/%d/' % (self.live_server_url, mick.pk))
+        main_window = self.selenium.current_window_handle
+        self.selenium.find_element_by_class_name('yaaac_lookup').click()
+
+        self.selenium.switch_to_window('id_band')
+        self.wait_page_loaded()
+        
         band_link = self.selenium.find_element_by_xpath("//tr[1]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()

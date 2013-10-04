@@ -8,7 +8,6 @@ class BandAdmin(admin.ModelAdmin):
 
 class BandMemberAdmin(admin.ModelAdmin):
     raw_id_fields = ("band",)
-    pass
 
 
 admin.site.register(models.MusicGenre)

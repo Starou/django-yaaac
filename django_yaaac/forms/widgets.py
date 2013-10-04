@@ -25,10 +25,11 @@ class AutocompleteWidget(forms.HiddenInput):
             static('django_yaaac/js/yaaac_autocomplete.js'),
         )
 
-    def __init__(self, site, model, opts=None, attrs=None):
+    def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None):
         self.site = site
         self.model = model
         self.opts = opts or {}
+        self.limit_choices_to = limit_choices_to or {}
         super(AutocompleteWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
@@ -45,6 +46,11 @@ class AutocompleteWidget(forms.HiddenInput):
             'search_url': search_url,
             'value_attr': value_attr, 
         })
+        params = self.url_parameters()
+        if params:
+            url_params = '?' + '&'.join('%s=%s' % (k, v) for k, v in params.items())
+        else:
+            url_params = ''
 
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)
         autocomp_input = format_html('<input{0} />',
@@ -53,10 +59,7 @@ class AutocompleteWidget(forms.HiddenInput):
                                               "placeholder": "start typing to search",
                                               "style": value and "display:none" or ""}))
         lookup_elem = format_html('<a {0}><img {1}></img></a>',
-                                  # FIXME: t=id is hardcoded and that's bad.
-                                  # Should do something like in ForeignKeyRawIdWidget.url_parameters()
-                                  # to filter on rel.limit_choices_to and self.limit_choices_to.
-                                  flatatt({"href": "%s?t=id" % lookup_url,
+                                  flatatt({"href": "%s%s" % (lookup_url, url_params),
                                            "id": "lookup_id_%s" % name,
                                            "class": "yaaac_lookup",
                                           "style": value and "display:none" or ""}),
@@ -78,3 +81,13 @@ class AutocompleteWidget(forms.HiddenInput):
         return format_html('<span{0}>{1}{2}</span>',
                            flatatt({"class": "yaaac_value_container", "style": style}),
                            label_elem, clear_elem)
+
+    def base_url_parameters(self):
+        from django.contrib.admin.widgets import url_params_from_lookup_dict
+        return url_params_from_lookup_dict(self.limit_choices_to)
+
+    def url_parameters(self):
+        from django.contrib.admin.views.main import TO_FIELD_VAR
+        params = self.base_url_parameters()
+        params.update({TO_FIELD_VAR: "id"}) # Hardcoded here because we do not have 'rel' object.
+        return params

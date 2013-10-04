@@ -17,7 +17,7 @@
   "pk": 3, 
   "model": "test_app.musicgenre", 
   "fields": {
-    "name": "Soap"
+    "name": "Cheese"
   }
 },
 {
@@ -75,6 +75,16 @@
       "Blues/Rock"
     ], 
     "name": "SuperHeavy"
+  }
+},
+{
+  "pk": 5, 
+  "model": "test_app.band", 
+  "fields": {
+    "genre": [
+      "Cheese"
+    ], 
+    "name": "BonJovi"
   }
 },
 {
