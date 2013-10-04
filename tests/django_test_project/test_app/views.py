@@ -37,7 +37,7 @@ def band_member_form(request, member_id=None):
     form = BandMemberForm(request.POST or None, instance=band_member)
     if request.method == 'POST':
         band_member = form.save()
-        return HttpResponseRedirect("/%s/" % band_member.pk)
+        return HttpResponseRedirect("/band-member-form/%s/" % band_member.pk)
     return render_to_response('base_form.html', {
         'form': form,
         'title': "Add a band member"

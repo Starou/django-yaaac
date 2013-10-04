@@ -77,7 +77,7 @@ class LiveServerTest(LiveServerTestCase):
 class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
-        self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
 
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
@@ -105,7 +105,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
     def test_foreign_key_autocomplete_with_initial(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger", band_id=2)
-        self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
 
         # The autocomplete field is not visible.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
@@ -121,7 +121,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
 
-        self.selenium.get('%s/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
