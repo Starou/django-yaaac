@@ -1,6 +1,27 @@
 [
 {
   "pk": 1, 
+  "model": "test_app.musicgenre", 
+  "fields": {
+    "name": "Rock"
+  }
+},
+{
+  "pk": 2, 
+  "model": "test_app.musicgenre", 
+  "fields": {
+    "name": "Blues/Rock"
+  }
+},
+{
+  "pk": 3, 
+  "model": "test_app.musicgenre", 
+  "fields": {
+    "name": "Soap"
+  }
+},
+{
+  "pk": 1, 
   "model": "auth.user", 
   "fields": {
     "username": "super", 
@@ -20,6 +41,9 @@
   "pk": 1, 
   "model": "test_app.band", 
   "fields": {
+    "genre": [
+      "Rock"
+    ], 
     "name": "Genesis"
   }
 },
@@ -27,6 +51,9 @@
   "pk": 2, 
   "model": "test_app.band", 
   "fields": {
+    "genre": [
+      "Blues/Rock"
+    ], 
     "name": "The Rolling Stones"
   }
 },
@@ -34,6 +61,9 @@
   "pk": 3, 
   "model": "test_app.band", 
   "fields": {
+    "genre": [
+      "Rock"
+    ], 
     "name": "The Stone Roses"
   }
 },
@@ -41,6 +71,9 @@
   "pk": 4, 
   "model": "test_app.band", 
   "fields": {
+    "genre": [
+      "Blues/Rock"
+    ], 
     "name": "SuperHeavy"
   }
 },
