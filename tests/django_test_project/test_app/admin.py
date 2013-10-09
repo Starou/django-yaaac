@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_static import static
 from test_app import models
+from test_app.views import BandMemberForm
 
 
 class BandAdmin(admin.ModelAdmin):
@@ -7,7 +9,10 @@ class BandAdmin(admin.ModelAdmin):
 
 
 class BandMemberAdmin(admin.ModelAdmin):
-    raw_id_fields = ("band",)
+    form = BandMemberForm
+    
+    class Media:
+        js = (static('js/jquery.min.js'), )
 
 
 admin.site.register(models.MusicGenre)
