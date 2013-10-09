@@ -5,6 +5,12 @@ Another Ajax Auto-Complete, Yet
 *Yaaac* is lightweight Django application providing Ajax search to fill foreign key fields in forms (admin or not).
 
 .. image:: examples/screenshot-1.png
+    :alt: Ajax search in progress
+    :scale: 66 %
+
+.. image:: examples/screenshot-2.png
+    :alt: Ajax search completed
+    :scale: 66 %
 
 
 Installation
