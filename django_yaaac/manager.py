@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django_yaaac.shortcuts import json_response
+from django_yaaac.utils import lookup_dict_from_url_params
 
 
 class AutocompleteManager(object):
@@ -29,8 +30,14 @@ class AutocompleteManager(object):
                 "value": unicode(klass.objects.get(pk=pk))
             })
 
-        result = klass.objects.filter(**{"%s__istartswith" % value_attr: query}
-                                     ).values_list('id', value_attr) or [('', '')]
+        filter_params = request.GET.copy()
+        del filter_params["t"]
+        del filter_params["query"]
+        del filter_params["value_attr"]
+        kwargs = lookup_dict_from_url_params(filter_params)
+        kwargs["%s__istartswith" % value_attr] = query
+
+        result = klass.objects.filter(**kwargs).values_list('id', value_attr) or [('', '')]
         suggestions = [{"value": r[1], "data": r[0]} for r in result]
         return json_response({'query': request.GET.get('query'),
                               'suggestions': suggestions})
