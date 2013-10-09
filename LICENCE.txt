@@ -6,6 +6,8 @@ Thanks to the Django guys[1] for the following material:
 - selector-search.gif
 - some bits of Javascript in js/yaaac_autocomplete.js
 
+And DevBridge [2] for the Javascript autcomplete plugin and CSS.
+
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,3 +35,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 [1] https://github.com/django/
+[2] https://github.com/devbridge/jQuery-Autocomplete/blob/master/license.txt
