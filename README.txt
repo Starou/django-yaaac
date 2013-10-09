@@ -2,7 +2,9 @@
 Another Ajax Auto-Complete, Yet
 ===============================
 
-*Yaaac* is lightweight Django application providing Ajax search to fill foreign key fields in forms (admin or not).
+*Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition 
+to the *raw_id_fields* related lookup and - *cerise sur le gâteau* - it is usable outside the admin.
+
 
 .. image:: examples/screenshot-1.png
     :alt: Ajax search in progress
@@ -41,3 +43,43 @@ In the *urls.py* module of your project, define the url pattern for ajax calls::
         url(r'^yaaac/', include(yaaac.autocomplete.urls)),
         ...
     )
+
+
+Usage
+=====
+
+What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*::
+
+
+    from django import forms
+    from django.contrib import admin
+    from django.contrib.admin.templatetags.admin_static import static
+    from django.template import RequestContext
+    from django_yaaac.forms.fields import AutocompleteModelChoiceField
+    from test_app import models
+    
+
+    class BandMemberForm(forms.ModelForm):
+        band = AutocompleteModelChoiceField(site=admin.site, 
+                                            queryset=models.Band.objects.all(),
+                                            yaaac_opts={
+                                                "value_attr": "name"
+                                            },
+                                            required=True)
+        class Meta:
+            model = models.BandMember
+
+
+    class BandMemberAdmin(admin.ModelAdmin):
+        form = BandMemberForm
+        
+        class Media:
+            # You need jQuery.
+            js = (static('js/jquery.min.js'), )
+
+
+    admin.site.register(models.BandMember, BandMemberAdmin)
+
+
+The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
+magnifier glass). The "value_attr" is the model attribute used for the suggestions.
