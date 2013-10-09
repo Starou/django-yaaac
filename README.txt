@@ -6,13 +6,26 @@ Another Ajax Auto-Complete, Yet
 to the *raw_id_fields* related lookup and - *cerise sur le gâteau* - it is usable outside the admin.
 
 
-.. image:: examples/screenshot-1.png
-    :alt: Ajax search in progress
-    :scale: 66 %
+Examples
+========
 
-.. image:: examples/screenshot-2.png
+In the admin
+------------
+
+Configure the admin form to enable Ajax search where you usually use *raw_id_fields*.
+
+.. image:: examples/screenshot-admin-1.png
+    :alt: Ajax search field 
+
+Start typing to select a value from the suggestion.
+
+.. image:: examples/screenshot-admin-2.png
+    :alt: Ajax search in progress
+
+The selected object is displayed using the unicode value. You can reset the field to choose another one.
+
+.. image:: examples/screenshot-admin-3.png
     :alt: Ajax search completed
-    :scale: 66 %
 
 
 Installation
@@ -82,4 +95,4 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
 
 The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
-magnifier glass). The "value_attr" is the model attribute used for the suggestions.
+magnifier glass). The *value_attr* is the model attribute used for the suggestions.
