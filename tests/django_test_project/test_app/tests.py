@@ -84,9 +84,9 @@ class YaaacLiveServerTest(LiveServerTest):
         band_search_elem.send_keys("the ")
         self.wait_for_ajax()
         suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
-        self.assertEqual(len(suggestion_elems), 2)
+        self.assertEqual(len(suggestion_elems), 3)
         self.assertEqual([elem.text for elem in suggestion_elems],
-                         [u"The Rolling Stones", u"The Stone Roses"])
+                         [u"The Rolling Stones", u"The Stone Roses", "The Bee Gees"])
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
@@ -128,7 +128,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
         
-        band_link = self.selenium.find_element_by_xpath("//tr[2]//a")
+        band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
         self.selenium.switch_to_window(main_window)
@@ -143,6 +143,34 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertTrue(band_value_container.is_displayed())
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
         self.assertEqual(band_value_elem.text, "SuperHeavy")
+
+    def test_foreign_key_limit_choices_autocomplete(self):
+        mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
+        self.selenium.get('%s/band-member-form/limit-choices/%d/' % (self.live_server_url, mick.pk))
+
+        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        self.assertTrue(band_search_elem.is_displayed())
+        band_search_elem.send_keys("the ")
+        self.wait_for_ajax()
+        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        self.assertEqual(len(suggestion_elems), 2)
+        self.assertEqual([elem.text for elem in suggestion_elems],
+                         [u"The Rolling Stones", u"The Stone Roses"])
+
+        suggestion_elems[0].click()
+        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        self.assertFalse(band_search_elem.is_displayed())
+
+        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        self.assertTrue(band_value_container.is_displayed())
+        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        self.assertEqual(band_value_elem.text, "The Rolling Stones")
+
+        # Clear the choice.
+        self.selenium.find_element_by_class_name('yaaac_clear_value').click()
+        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "")
+        self.assertTrue(band_search_elem.is_displayed())
+        self.assertFalse(band_value_container.is_displayed())
 
     def test_foreign_key_limit_choices_related_lookup(self):
         self.admin_login("super", "secret", login_url='/admin/')

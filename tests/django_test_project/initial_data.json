@@ -88,6 +88,16 @@
   }
 },
 {
+  "pk": 6, 
+  "model": "test_app.band", 
+  "fields": {
+    "genre": [
+      "Cheese"
+    ], 
+    "name": "The Bee Gees"
+  }
+},
+{
   "pk": 1, 
   "model": "test_app.bandmember", 
   "fields": {
