@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-yaaac',
-    version='0.91',
+    version='0.91.1',
     license='BSD Licence',
     author='Stanislas Guerra',
     author_email='stanislas.guerra@gmail.com',
@@ -17,6 +17,15 @@ setup(
     url='https://github.com/Starou/django-yaaac',
     packages=['django_yaaac',
               'django_yaaac.forms'],
+    package_data={
+        'django_yaaac': [
+            'static/django_yaaac/css/*.css',
+            'static/django_yaaac/js/*.js',
+            'static/django_yaaac/img/*.png',
+            'static/django_yaaac/img/*.jpg',
+            'static/django_yaaac/img/*.gif',
+        ]
+    },
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
