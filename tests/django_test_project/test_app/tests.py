@@ -327,3 +327,51 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertTrue(band_value_container.is_displayed())
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
         self.assertEqual(band_value_elem.text, "SuperHeavy")
+
+    def test_foreign_key_autocomplete_admin_inlines(self):
+        self.admin_login("super", "secret", login_url='/admin/')
+        genesis = models.Band.objects.get(name="Genesis")
+        self.selenium.get('%s/admin/test_app/band/%d/' % (self.live_server_url, genesis.pk))
+
+        # Phil Collins and Peter Gabriel have their favorite instrument set and shown.
+        fav_search_elem = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-0"]//input[@class="yaaac_search_input"]')
+        self.assertFalse(fav_search_elem.is_displayed())
+        fav_value_container = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-0"]//span[@class="yaaac_value_container"]')
+        self.assertTrue(fav_value_container.is_displayed())
+        fav_value_elem = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-0"]//span[@class="yaaac_value"]')
+        self.assertEqual(fav_value_elem.text, "Drums")
+
+        # But not Tony Banks...
+        fav_search_elem = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-2"]//input[@class="yaaac_search_input"]')
+        self.assertTrue(fav_search_elem.is_displayed())
+        fav_value_container = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-2"]//span[@class="yaaac_value_container"]')
+        self.assertFalse(fav_value_container.is_displayed())
+        fav_value_elem = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-2"]//span[@class="yaaac_value"]')
+        self.assertEqual(fav_value_elem.text, "")
+
+        # Let's start searching a favorite instrument for Tony.
+        fav_search_elem.send_keys("key")
+        self.wait_for_ajax()
+        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        self.assertEqual(len(suggestion_elems), 1)
+
+        suggestion_elems[0].click()
+        self.assertEqual(self.selenium.find_element_by_id(
+            'id_bandmember_set-2-favorite_instrument').get_attribute("value"), "3")
+
+        self.assertFalse(fav_search_elem.is_displayed())
+        self.assertTrue(fav_value_container.is_displayed())
+        self.assertEqual(fav_value_elem.text, "Keyboards")
+
+        # Clear the choice.
+        self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-2"]//*[@class="yaaac_clear_value"]').click()
+        self.assertEqual(self.selenium.find_element_by_id(
+            'id_bandmember_set-2-favorite_instrument').get_attribute("value"), "")
+        self.assertTrue(fav_search_elem.is_displayed())
+        self.assertFalse(fav_value_container.is_displayed())
