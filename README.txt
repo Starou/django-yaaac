@@ -27,6 +27,11 @@ The selected object is displayed using the unicode value. You can reset the fiel
 .. image:: examples/screenshot-admin-3.png
     :alt: Ajax search completed
 
+In inlines as well.
+
+.. image:: examples/screenshot-admin-inline.png
+    :alt: Ajax search in inlines
+
 
 Installation
 ============
