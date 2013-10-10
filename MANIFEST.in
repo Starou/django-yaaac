@@ -1,0 +1,4 @@
+include LICENCE.txt
+include README.txt
+recursive-include django_yaaac/static *
+recursive-include examples *

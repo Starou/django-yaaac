@@ -2,3 +2,6 @@
 *.pyc
 *.sqlite
 *.DS_Store
+MANIFEST
+dist
+tests/django_test_project/extra_data.json

@@ -3,7 +3,7 @@ Another Ajax Auto-Complete, Yet
 ===============================
 
 *Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition 
-to the *raw_id_fields* related lookup and - *cerise sur le gâteau* - it is usable outside the admin.
+to the *raw_id_fields* related lookup and - *cerise sur le gateau* - it is usable outside the admin.
 
 
 Examples
@@ -42,7 +42,7 @@ Install the app from the source::
 
 Or with *pip*::
 
-    #TODO
+    pip install django-yaaac
 
 Add the app in your settings.INSTALLED_APPS::
 
