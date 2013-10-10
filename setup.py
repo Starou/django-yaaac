@@ -15,8 +15,8 @@ setup(
     description='Django application providing Ajax search capabilities.',
     long_description = README,
     url='https://github.com/Starou/django-yaaac',
-    packages=['django_yaaac'],
-    #include_package_data=True,
+    packages=['django_yaaac',
+              'django_yaaac.forms'],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
