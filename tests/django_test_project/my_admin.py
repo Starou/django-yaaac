@@ -1,15 +1,23 @@
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
 from test_app import models
-from test_app.views import BandMemberForm, BandMemberLimitForm
+from test_app.views import BandMemberForm, BandMemberInlineForm, BandMemberLimitForm
 
 
 class AutocompleteAdmin(admin.AdminSite):
     pass
 
 
+class BandMemberInline(admin.TabularInline):
+    model = models.BandMember
+    form = BandMemberInlineForm
+    
+    class Media:
+        js = (static('js/jquery.min.js'), )
+
+
 class BandAdmin(admin.ModelAdmin):
-    pass
+    inlines = [BandMemberInline,]
 
 
 class BandMemberAdmin(admin.ModelAdmin):
@@ -20,9 +28,13 @@ class BandMemberAdmin(admin.ModelAdmin):
 
 
 autocomplete_site = AutocompleteAdmin(name='autocomplete-admin')
+autocomplete_site.register(models.Instrument)
 autocomplete_site.register(models.MusicGenre)
 autocomplete_site.register(models.Band, BandAdmin)
 autocomplete_site.register(models.BandMember, BandMemberAdmin)
+
+
+## An Admin with 'limit_choices_to' set. ## 
 
 
 class LimitChoicesBandMemberAdmin(BandMemberAdmin):

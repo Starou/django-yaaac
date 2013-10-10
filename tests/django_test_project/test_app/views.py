@@ -7,13 +7,14 @@ from django_yaaac.forms.fields import AutocompleteModelChoiceField
 from test_app import models
 
 
+## Forms ##
+
 class BandMemberForm(forms.ModelForm):
     band = AutocompleteModelChoiceField(site=admin.site, 
                                         queryset=models.Band.objects.all(),
                                         yaaac_opts={
                                             "value_attr": "name"
-                                        },
-                                        required=True)
+                                        }, required=True)
     class Meta:
         model = models.BandMember
 
@@ -24,11 +25,22 @@ class BandMemberLimitForm(forms.ModelForm):
                                         limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                                         yaaac_opts={
                                             "value_attr": "name"
-                                        },
-                                        required=True)
+                                        }, required=True)
     class Meta:
         model = models.BandMember
 
+
+class BandMemberInlineForm(forms.ModelForm):
+    favorite_instrument = AutocompleteModelChoiceField(label="Favorite instrument", site=admin.site, 
+                                                       queryset=models.Instrument.objects.all(),
+                                                       yaaac_opts={
+                                                           "value_attr": "name"
+                                                       }, required=False)
+    class Meta:
+        model = models.BandMember
+
+
+## Views ##
 
 def band_member_form(request, member_id=None):
     band_member = None

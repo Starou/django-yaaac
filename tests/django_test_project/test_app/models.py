@@ -1,6 +1,10 @@
 from django.db import models
 
 
+class InstrumentManager(models.Manager):
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 
 class MusicGenreManager(models.Manager):
     def get_by_natural_key(self, name):
@@ -17,9 +21,19 @@ class BandMemberManager(models.Manager):
         return self.get(first_name=first_name, last_name=last_name)
 
 
+class Instrument(models.Model):
+    objects = InstrumentManager()
+    name = models.CharField(max_length=64, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def natural_key(self):
+        return (self.name,)
+
+
 class MusicGenre(models.Model):
     objects = MusicGenreManager()
-
     name = models.CharField(max_length=64, unique=True)
 
     def __unicode__(self):
@@ -31,7 +45,6 @@ class MusicGenre(models.Model):
 
 class Band(models.Model):
     objects = BandManager()
-
     name = models.CharField(max_length=100, unique=True)
     genre = models.ForeignKey("MusicGenre", null=True, blank=True)
 
@@ -44,11 +57,11 @@ class Band(models.Model):
 
 class BandMember(models.Model):
     objects = BandMemberManager()
-
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     band = models.ForeignKey("Band", limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                              null=True, blank=True)
+    favorite_instrument = models.ForeignKey("Instrument", null=True, blank=True)
 
     class Meta:
         unique_together = (('first_name', 'last_name'),)

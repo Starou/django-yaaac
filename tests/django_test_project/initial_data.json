@@ -1,6 +1,41 @@
 [
 {
   "pk": 1, 
+  "model": "test_app.instrument", 
+  "fields": {
+    "name": "Vocals"
+  }
+},
+{
+  "pk": 2, 
+  "model": "test_app.instrument", 
+  "fields": {
+    "name": "Guitare"
+  }
+},
+{
+  "pk": 3, 
+  "model": "test_app.instrument", 
+  "fields": {
+    "name": "Keyboards"
+  }
+},
+{
+  "pk": 4, 
+  "model": "test_app.instrument", 
+  "fields": {
+    "name": "Drums"
+  }
+},
+{
+  "pk": 5, 
+  "model": "test_app.instrument", 
+  "fields": {
+    "name": "Percussion"
+  }
+},
+{
+  "pk": 1, 
   "model": "test_app.musicgenre", 
   "fields": {
     "name": "Rock"
@@ -105,7 +140,10 @@
       "Genesis"
     ], 
     "first_name": "Phil", 
-    "last_name": "Collins"
+    "last_name": "Collins",
+    "favorite_instrument": [
+      "Drums"
+    ]
   }
 },
 {
@@ -116,7 +154,10 @@
       "Genesis"
     ], 
     "first_name": "Peter", 
-    "last_name": "Gabriel"
+    "last_name": "Gabriel",
+    "favorite_instrument": [
+      "Vocals"
+    ]
   }
 },
 {
@@ -127,7 +168,8 @@
       "Genesis"
     ], 
     "first_name": "Tony", 
-    "last_name": "Banks"
+    "last_name": "Banks",
+    "favorite_instrument": null
   }
 }
 ]
