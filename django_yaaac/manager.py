@@ -11,7 +11,7 @@ class AutocompleteManager(object):
     def get_urls(self):
         from django.conf.urls import patterns, url
         urlpatterns = patterns('',
-            url(r'^(?P<content_type_id>\d+)/search/$', self.search, name='search'),
+            url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         )
         return urlpatterns
 
@@ -19,8 +19,8 @@ class AutocompleteManager(object):
     def urls(self):
         return self.get_urls(), self.app_name, self.name
 
-    def search(self, request, content_type_id):
-        klass = ContentType.objects.get_for_id(id=content_type_id).model_class()
+    def search(self, request, app, model):
+        klass = ContentType.objects.get(app_label=app, model=model).model_class()
 
         query = request.GET.get('query')
         value_attr = request.GET.get('value_attr')

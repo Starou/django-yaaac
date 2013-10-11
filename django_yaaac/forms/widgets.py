@@ -1,7 +1,6 @@
 from django import VERSION as DJ_VERSION
 from django import forms
 from django.contrib.admin.templatetags.admin_static import static
-from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse_lazy
 if DJ_VERSION < (1, 6):
     from django.forms.util import flatatt
@@ -35,11 +34,11 @@ class AutocompleteWidget(forms.HiddenInput):
     def render(self, name, value, attrs=None):
         app_label = self.model._meta.app_label
         if DJ_VERSION < (1, 6):
-            info = (self.site.name, app_label, self.model._meta.module_name)
+            model_name = self.model._meta.module_name
         else:
-            info = (self.site.name, app_label, self.model._meta.model_name)
-        content_type_id = ContentType.objects.get_for_model(self.model).id
-        search_url = reverse_lazy("yaaac:search", kwargs={"content_type_id": content_type_id})
+            model_name = self.model._meta.model_name
+        info = (self.site.name, app_label, model_name)
+        search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name})
         value_attr = self.opts["value_attr"]
         lookup_url = reverse_lazy('%s:%s_%s_changelist' % info, current_app=self.site.name)
         params = self.url_parameters()
