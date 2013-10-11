@@ -13,9 +13,16 @@ class AutocompleteTest(TestCase):
         self.client = Client()
     
     def test_search(self):
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=gene&search_fields=name") 
+       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=^name") 
        self.assertEqual(json.loads(response.content),
-                        {u'query': u'gene', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
+                        {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
+
+       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=name") 
+       self.assertEqual(json.loads(response.content),
+                        {u'query': u'ge', u'suggestions': [
+                            {u'data': 1, u'value': u'Genesis'},
+                            {u'data': 6, u'value': u'The Bee Gees'},
+                        ]})
 
     def test_search_callable(self):
        response = self.client.get(
@@ -24,6 +31,20 @@ class AutocompleteTest(TestCase):
                         {u'query': u'ph', u'suggestions': [
                             {u'data': 1, u'value': u'Phil Collins'},
                             {u'data': 4, u'value': u'Phil Spector'},
+                        ]})
+       response = self.client.get(
+           "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name") 
+       self.assertEqual(json.loads(response.content),
+                        {u'query': u'ph', u'suggestions': [
+                            {u'data': 1, u'value': u'Phil Collins'},
+                            {u'data': 4, u'value': u'Phil Spector'},
+                        ]})
+
+       response = self.client.get(
+           "/yaaac/test_app/bandmember/search/?t=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name") 
+       self.assertEqual(json.loads(response.content),
+                        {u'query': u'ph col', u'suggestions': [
+                            {u'data': 1, u'value': u'Phil Collins'},
                         ]})
 
     def test_search_with_pk(self):
