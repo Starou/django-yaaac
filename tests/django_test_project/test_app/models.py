@@ -55,6 +55,7 @@ class Band(models.Model):
         return (self.name,)
 
 
+
 class BandMember(models.Model):
     objects = BandMemberManager()
     first_name = models.CharField(max_length=100)
@@ -71,3 +72,6 @@ class BandMember(models.Model):
 
     def natural_key(self):
         return (self.first_name, self.last_name)
+
+    def get_full_name(self):
+        return u"%s %s" % (self.first_name, self.last_name)

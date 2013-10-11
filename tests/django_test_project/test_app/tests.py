@@ -17,6 +17,15 @@ class AutocompleteTest(TestCase):
        self.assertEqual(json.loads(response.content),
                         {u'query': u'gene', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
+    def test_search_callable(self):
+       response = self.client.get(
+           "/yaaac/test_app/bandmember/search/?t=id&query=ph&value_attr=first_name&suggest_by=get_full_name") 
+       self.assertEqual(json.loads(response.content),
+                        {u'query': u'ph', u'suggestions': [
+                            {u'data': 1, u'value': u'Phil Collins'},
+                            {u'data': 4, u'value': u'Phil Spector'},
+                        ]})
+
     def test_search_with_pk(self):
        response = self.client.get("/yaaac/test_app/band/search/?pk=1") 
        self.assertEqual(json.loads(response.content), {'value': 'Genesis'})

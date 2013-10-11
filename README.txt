@@ -81,7 +81,8 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
         band = AutocompleteModelChoiceField(site=admin.site, 
                                             queryset=models.Band.objects.all(),
                                             yaaac_opts={
-                                                "value_attr": "name"
+                                                "value_attr": "name",
+                                                "suggest_by": "get_full_name",
                                             },
                                             required=True)
         class Meta:
@@ -108,3 +109,7 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
     <head>
       {{ form.media }}
     </head>
+
+
+*suggest_by* is optional. It can be a field or a method of the model.
+By default, suggestions are shown using *value_attr*

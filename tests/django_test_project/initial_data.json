@@ -171,5 +171,14 @@
     "last_name": "Banks",
     "favorite_instrument": null
   }
+},
+{
+  "pk": 4, 
+  "model": "test_app.bandmember", 
+  "fields": {
+    "first_name": "Phil", 
+    "last_name": "Spector",
+    "favorite_instrument": null
+  }
 }
 ]

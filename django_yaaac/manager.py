@@ -24,6 +24,7 @@ class AutocompleteManager(object):
 
         query = request.GET.get('query')
         value_attr = request.GET.get('value_attr')
+        suggest_by = request.GET.get('suggest_by') or value_attr
         pk = request.GET.get('pk')
         if pk:
             return json_response({
@@ -34,10 +35,17 @@ class AutocompleteManager(object):
         del filter_params["t"]
         del filter_params["query"]
         del filter_params["value_attr"]
+        if "suggest_by" in filter_params:
+            del filter_params["suggest_by"]
         kwargs = lookup_dict_from_url_params(filter_params)
         kwargs["%s__istartswith" % value_attr] = query
 
-        result = klass.objects.filter(**kwargs).values_list('id', value_attr) or [('', '')]
+        result = klass.objects.filter(**kwargs)
+        if suggest_by in klass._meta.get_all_field_names():
+            result = result.values_list('id', value_attr)
+        else:
+            result = [(obj.pk, getattr(obj, suggest_by)()) for obj in result]
+        result = result or [('', '')]
         suggestions = [{"value": r[1], "data": r[0]} for r in result]
         return json_response({'query': request.GET.get('query'),
                               'suggestions': suggestions})
