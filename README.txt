@@ -101,3 +101,10 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
 The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
 magnifier glass). The *value_attr* is the model attribute used for the suggestions.
+
+Do not forget to add *jQuery* in your template (using *ModelAdmin.Media.js* in the example above).
+Outside the admin, you have to explicitly call the yaaac static files like that::
+    
+    <head>
+      {{ form.media }}
+    </head>
