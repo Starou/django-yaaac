@@ -49,7 +49,7 @@ class AutocompleteWidget(forms.HiddenInput):
 
         attrs.update({
             'search_url': "%s%s" % (search_url, url_params),
-            'search_fields': search_fields, 
+            'search_fields': ",".join(search_fields), 
         })
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)
         autocomp_input = format_html('<input{0} />',

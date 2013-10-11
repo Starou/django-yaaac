@@ -81,7 +81,7 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
         band = AutocompleteModelChoiceField(site=admin.site, 
                                             queryset=models.Band.objects.all(),
                                             yaaac_opts={
-                                                "search_fields": "name",
+                                                "search_fields": ["^name"],
                                                 "suggest_by": "get_full_name",
                                             },
                                             required=True)
@@ -101,7 +101,8 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
 
 The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
-magnifier glass). The *search_fields* is the model attribute used for the suggestions.
+magnifier glass). The *search_fields* is a list of fields to search against using the same syntax
+as in Django Admin (^, $ etc).
 
 Do not forget to add *jQuery* in your template (using *ModelAdmin.Media.js* in the example above).
 Outside the admin, you have to explicitly call the yaaac static files like that::
@@ -112,4 +113,4 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
 
 
 *suggest_by* is optional. It can be a field or a method of the model.
-By default, suggestions are shown using *search_fields*
+By default, suggestions are shown using *__unicode__* method.
