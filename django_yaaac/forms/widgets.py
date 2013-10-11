@@ -39,7 +39,7 @@ class AutocompleteWidget(forms.HiddenInput):
             model_name = self.model._meta.model_name
         info = (self.site.name, app_label, model_name)
         search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name})
-        value_attr = self.opts["value_attr"]
+        search_fields = self.opts["search_fields"]
         lookup_url = reverse_lazy('%s:%s_%s_changelist' % info, current_app=self.site.name)
         params = self.url_parameters()
         if params:
@@ -49,7 +49,7 @@ class AutocompleteWidget(forms.HiddenInput):
 
         attrs.update({
             'search_url': "%s%s" % (search_url, url_params),
-            'value_attr': value_attr, 
+            'search_fields': search_fields, 
         })
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)
         autocomp_input = format_html('<input{0} />',

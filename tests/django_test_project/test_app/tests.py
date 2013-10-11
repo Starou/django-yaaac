@@ -13,13 +13,13 @@ class AutocompleteTest(TestCase):
         self.client = Client()
     
     def test_search(self):
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=gene&value_attr=name") 
+       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=gene&search_fields=name") 
        self.assertEqual(json.loads(response.content),
                         {u'query': u'gene', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
     def test_search_callable(self):
        response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?t=id&query=ph&value_attr=first_name&suggest_by=get_full_name") 
+           "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name&suggest_by=get_full_name") 
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ph', u'suggestions': [
                             {u'data': 1, u'value': u'Phil Collins'},

@@ -13,7 +13,7 @@ class BandMemberForm(forms.ModelForm):
     band = AutocompleteModelChoiceField(site=admin.site, 
                                         queryset=models.Band.objects.all(),
                                         yaaac_opts={
-                                            "value_attr": "name"
+                                            "search_fields": "name"
                                         }, required=True)
     class Meta:
         model = models.BandMember
@@ -24,7 +24,7 @@ class BandMemberLimitForm(forms.ModelForm):
                                         queryset=models.Band.objects.all(),
                                         limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                                         yaaac_opts={
-                                            "value_attr": "name"
+                                            "search_fields": "name"
                                         }, required=True)
     class Meta:
         model = models.BandMember
@@ -34,7 +34,7 @@ class BandMemberInlineForm(forms.ModelForm):
     favorite_instrument = AutocompleteModelChoiceField(label="Favorite instrument", site=admin.site, 
                                                        queryset=models.Instrument.objects.all(),
                                                        yaaac_opts={
-                                                           "value_attr": "name"
+                                                           "search_fields": "name"
                                                        }, required=False)
     class Meta:
         model = models.BandMember

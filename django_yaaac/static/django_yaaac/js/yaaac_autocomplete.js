@@ -2,7 +2,7 @@ var yaaac_set_label = function() {
     /* Display the unicode() value of the instance and hide the autocomplete input. */
     var $id_input = $(this);
     if ($id_input.val() !== "") {
-        $.get($id_input.attr("search_url"), {value_attr: $id_input.attr("value_attr"), pk: $id_input.val()},
+        $.get($id_input.attr("search_url"), {search_fields: $id_input.attr("search_fields"), pk: $id_input.val()},
               function(data){
                 var $search_input = $id_input.next();
                 var $lookup_elem = $search_input.next();
@@ -86,7 +86,7 @@ $(document).ready(function() {
                 $id_input.val(suggestion.data).change();
             },
             params: {
-                value_attr: $id_input.attr("value_attr")
+                search_fields: $id_input.attr("search_fields")
             }
         };
         $input = $(this).autocomplete(options);
