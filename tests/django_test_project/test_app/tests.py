@@ -418,13 +418,17 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertTrue(fav_search_elem.is_displayed())
         fav_search_elem.send_keys("guit")
         self.wait_for_ajax()
-        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        suggestion_elems = self.selenium.find_elements_by_xpath(
+            '//div[@class="autocomplete-suggestions"][2]/div[@class="autocomplete-suggestion"]')
         self.assertEqual(len(suggestion_elems), 1)
-
+        self.assertEqual([elem.text for elem in suggestion_elems], [u"Guitare"])
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id(
             'id_bandmember_set-3-favorite_instrument').get_attribute("value"), "2")
 
         self.assertFalse(fav_search_elem.is_displayed())
+        fav_value_container = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-3"]//span[@class="yaaac_value_container"]')
         self.assertTrue(fav_value_container.is_displayed())
+        fav_value_elem = self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-3"]//span[@class="yaaac_value"]')
         self.assertEqual(fav_value_elem.text, "Guitare")

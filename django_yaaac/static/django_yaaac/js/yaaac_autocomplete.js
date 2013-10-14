@@ -27,6 +27,28 @@ var yaaac_clear_value = function() {
 };
 
 
+var yaaac_set_autocomplete = function() {
+    /* Add autocomplete if not already.
+     * Attached to 'focus' event to handle inlines not present when page is loaded.
+     * */
+    if ($(this).autocomplete()) {
+        return;
+    }
+    var $id_input = $(this).prev();
+    var options = {
+        serviceUrl: $id_input.attr("search_url"),
+        onSelect: function(suggestion) {
+            $id_input.val(suggestion.data).change();
+        },
+        params: {
+            search_fields: $id_input.attr("search_fields")
+        }
+    };
+    $input = $(this).autocomplete(options);
+    $input.autocomplete().enable();
+};
+
+
 var id_to_windowname = function(text) {
 /* Inspired from django/contrib/admin/static/admin/js/admin/RelatedObjectsLookup.js */
     text = text.replace(/\./g, '__dot__');
@@ -73,22 +95,8 @@ var dismissRelatedLookupPopup = function(win, chosenId) {
 
 
 $(document).ready(function() {
-    $(".yaaac_pk").on("change", yaaac_set_label);
-    $(".yaaac_clear_value").on("click", yaaac_clear_value);
-    $(".yaaac_lookup").on("click", yaaac_open_lookup);
-
-    $(".yaaac_search_input").each(function() {
-        // $id_input is the input.yaaac_pk elem.
-        var $id_input = $(this).prev();
-        var options = {
-            serviceUrl: $id_input.attr("search_url"),
-            onSelect: function(suggestion) {
-                $id_input.val(suggestion.data).change();
-            },
-            params: {
-                search_fields: $id_input.attr("search_fields")
-            }
-        };
-        $input = $(this).autocomplete(options);
-    });
+    $("body").on("change", ".yaaac_pk", yaaac_set_label);
+    $("body").on("click", ".yaaac_clear_value", yaaac_clear_value);
+    $("body").on("click", ".yaaac_lookup", yaaac_open_lookup);
+    $("body").on("focus", ".yaaac_search_input", yaaac_set_autocomplete);
 });
