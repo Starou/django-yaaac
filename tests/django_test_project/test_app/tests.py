@@ -432,3 +432,13 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertTrue(fav_value_container.is_displayed())
         fav_value_elem = self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-3"]//span[@class="yaaac_value"]')
         self.assertEqual(fav_value_elem.text, "Guitare")
+
+        # Save the form. Check models.
+        self.selenium.find_element_by_name("_save").click()
+        genesis = models.Band.objects.get(name="Genesis")
+        self.assertEqual(list(genesis.bandmember_set.all().order_by("last_name").values_list(
+            "first_name", "last_name", "favorite_instrument__name")), [
+                (u'Tony', u'Banks', None),
+                (u'Phil', u'Collins', u'Drums'),
+                (u'Peter', u'Gabriel', u'Vocals'),
+                (u'Steeve', u'Hackett', u'Guitare')])
