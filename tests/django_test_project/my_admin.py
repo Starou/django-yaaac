@@ -11,6 +11,7 @@ class AutocompleteAdmin(admin.AdminSite):
 class BandMemberInline(admin.TabularInline):
     model = models.BandMember
     form = BandMemberInlineForm
+    extra = 0
     
     class Media:
         js = (static('js/jquery.min.js'), )

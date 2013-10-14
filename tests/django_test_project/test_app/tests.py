@@ -405,3 +405,26 @@ class YaaacLiveServerTest(LiveServerTest):
             'id_bandmember_set-2-favorite_instrument').get_attribute("value"), "")
         self.assertTrue(fav_search_elem.is_displayed())
         self.assertFalse(fav_value_container.is_displayed())
+
+        # Add a new band member using "add another Band Member" link.
+        self.selenium.find_element_by_xpath('//tr[@class="add-row"]/td/a').click()
+        first_name_input = self.selenium.find_element_by_id("id_bandmember_set-3-first_name")
+        first_name_input.send_keys("Steeve")
+        last_name_input = self.selenium.find_element_by_id("id_bandmember_set-3-last_name")
+        last_name_input.send_keys("Hackett")
+
+        fav_search_elem = self.selenium.find_element_by_xpath(
+            '//tr[@id="bandmember_set-3"]//input[@class="yaaac_search_input"]')
+        self.assertTrue(fav_search_elem.is_displayed())
+        fav_search_elem.send_keys("guit")
+        self.wait_for_ajax()
+        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        self.assertEqual(len(suggestion_elems), 1)
+
+        suggestion_elems[0].click()
+        self.assertEqual(self.selenium.find_element_by_id(
+            'id_bandmember_set-3-favorite_instrument').get_attribute("value"), "2")
+
+        self.assertFalse(fav_search_elem.is_displayed())
+        self.assertTrue(fav_value_container.is_displayed())
+        self.assertEqual(fav_value_elem.text, "Guitare")
