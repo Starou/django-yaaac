@@ -18,10 +18,3 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         ModelChoiceField.__init__(self, queryset, empty_label, cache_choices,
                                   required, widget, label, initial, help_text,
                                   to_field_name, *args, **kwargs)
-
-    def widget_attrs(self, widget):
-        attrs = super(AutocompleteModelChoiceField, self).widget_attrs(widget)
-        attrs.update({
-            'class': 'yaaac_pk vForeignKeyRawIdAdminField',
-        })
-        return attrs

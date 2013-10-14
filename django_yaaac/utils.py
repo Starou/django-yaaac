@@ -8,3 +8,11 @@ def lookup_dict_from_url_params(url_params):
         else:
             lookup_dict[k] = v
     return lookup_dict
+
+def clean_fieldname_prefix(fieldname):
+    import re
+    try:
+        fieldname = re.match(r'(.*)-(\w+)', fieldname).groups()[1]
+    except AttributeError:
+        pass
+    return fieldname

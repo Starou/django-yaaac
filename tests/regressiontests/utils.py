@@ -11,6 +11,13 @@ class UtilsTestCase(unittest.TestCase):
                          {"genre__name__in": ["Rock","Blues/Rock"],
                           "label__name": "Foo Records"})
 
+    def test_clean_fieldname_prefix(self):
+        from django_yaaac.utils import clean_fieldname_prefix
+        self.assertEqual(clean_fieldname_prefix("name"), "name")
+        self.assertEqual(clean_fieldname_prefix("prefix-form-1-name"), "name")
+        self.assertEqual(clean_fieldname_prefix("prefix_form-1-name"), "name")
+        self.assertEqual(clean_fieldname_prefix("prefixform-1-name"), "name")
+
 
 def suite():
     suite = unittest.TestLoader().loadTestsFromTestCase(UtilsTestCase)

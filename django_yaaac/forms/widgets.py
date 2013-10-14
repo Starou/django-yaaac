@@ -8,6 +8,7 @@ else:
     from django.forms.utils import flatatt
 from django.utils.html import format_html
 from django.utils.text import Truncator
+from django_yaaac.utils import clean_fieldname_prefix
 
 
 class AutocompleteWidget(forms.HiddenInput):
@@ -48,6 +49,7 @@ class AutocompleteWidget(forms.HiddenInput):
             url_params = ''
 
         attrs.update({
+            'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
             'search_url': "%s%s" % (search_url, url_params),
             'search_fields': ",".join(search_fields), 
         })
