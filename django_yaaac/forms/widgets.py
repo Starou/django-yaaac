@@ -65,7 +65,7 @@ class AutocompleteWidget(forms.HiddenInput):
                                   flatatt({"width": "16", "height": "16", "alt": "Lookup",
                                            "src": static('django_yaaac/img/selector-search.gif')}))
         
-        return format_html('<span class="yaaac_container">{0}{1}{2}{3}</span>',
+        return format_html(u'<span class="yaaac_container">{0}{1}{2}{3}</span>',
                            hidden_input, autocomp_input, lookup_elem, self.value_elem(value))
 
     def value_elem(self, value):
@@ -76,8 +76,8 @@ class AutocompleteWidget(forms.HiddenInput):
             obj = self.model._default_manager.get(pk=value)
             label = Truncator(obj).words(14, truncate=" ...")
             style = ''
-        label_elem = format_html('<span{0}>{1}</span>', flatatt({"class": "yaaac_value"}), label)
-        return format_html('<span{0}>{1}{2}</span>',
+        label_elem = format_html(u'<span{0}>{1}</span>', flatatt({"class": "yaaac_value"}), label)
+        return format_html(u'<span{0}>{1}{2}</span>',
                            flatatt({"class": "yaaac_value_container", "style": style}),
                            label_elem, clear_elem)
 
