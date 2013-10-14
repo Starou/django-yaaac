@@ -20,7 +20,7 @@ var yaaac_set_label = function() {
 
 var yaaac_clear_value = function() {
     /* Clear the FK field and switch to autocomplete search mode. */
-    $(this).parents(".yaaac_container").find(".yaaac_pk").val("");
+    $(this).parents(".yaaac_container").find(".yaaac_pk").val("").change();
     $(this).parent().hide();
     $(this).parents(".yaaac_container").find(".yaaac_search_input").val("").show();
     $(this).parents(".yaaac_container").find(".yaaac_lookup").show();
