@@ -39,7 +39,7 @@ var yaaac_set_autocomplete = function() {
     var options = {
         minChars: dj_opts.min_chars,
         maxHeight: dj_opts.max_height,
-        width: dj_opts.max_height,
+        width: dj_opts.width,
         serviceUrl: $id_input.attr("search_url"),
         onSelect: function(suggestion) {
             $id_input.val(suggestion.data).change();
