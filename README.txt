@@ -83,6 +83,9 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
                                             yaaac_opts={
                                                 "search_fields": ["^name"],
                                                 "suggest_by": "get_full_name",
+                                                "min_chars": 3,    # Fire search when 3 chars are sent (1 by default.)
+                                                "max_height": 400, # 300px by default.
+                                                "width": 250,      # 300px by default.
                                             },
                                             required=True)
         class Meta:
@@ -103,6 +106,9 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
 magnifier glass). The *search_fields* is a list of fields to search against using the same syntax
 as in Django Admin (^, $ etc).
+Extra options *min_chars*, *max_height* and *width* are the counter-part of *minChars*, *maxHeight* and *width*
+in `Autocomplete options <https://github.com/devbridge/jQuery-Autocomplete#api>`_.
+
 
 Do not forget to add *jQuery* in your template (using *ModelAdmin.Media.js* in the example above).
 Outside the admin, you have to explicitly call the yaaac static files like that::
