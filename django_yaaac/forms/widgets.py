@@ -1,3 +1,4 @@
+import json
 from django import VERSION as DJ_VERSION
 from django import forms
 from django.contrib.admin.templatetags.admin_static import static
@@ -28,7 +29,14 @@ class AutocompleteWidget(forms.HiddenInput):
     def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None):
         self.site = site
         self.model = model
-        self.opts = opts or {}
+        self.opts = {
+            "min_chars": 1,
+            "max_height": 300,
+            "width": 300,
+        }
+        # opts should not by None.
+        self.opts.update(opts)
+
         self.limit_choices_to = limit_choices_to or {}
         super(AutocompleteWidget, self).__init__(attrs)
 
@@ -40,7 +48,12 @@ class AutocompleteWidget(forms.HiddenInput):
             model_name = self.model._meta.model_name
         info = (self.site.name, app_label, model_name)
         search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name})
-        search_fields = self.opts["search_fields"]
+        
+        # Cannot just do self.opts.pop("search_fields") because render() must be side-effect free.
+        search_fields = self.opts.get("search_fields")
+        search_opts = self.opts.copy()
+        del search_opts["search_fields"]
+
         lookup_url = reverse_lazy('%s:%s_%s_changelist' % info, current_app=self.site.name)
         params = self.url_parameters()
         if params:
@@ -51,6 +64,7 @@ class AutocompleteWidget(forms.HiddenInput):
         attrs.update({
             'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
             'search_url': "%s%s" % (search_url, url_params),
+            'search_opts': json.dumps(search_opts),
             'search_fields': ",".join(search_fields), 
         })
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)

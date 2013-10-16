@@ -35,7 +35,11 @@ var yaaac_set_autocomplete = function() {
         return;
     }
     var $id_input = $(this).prev();
+    var dj_opts = $.parseJSON($id_input.attr("search_opts"));
     var options = {
+        minChars: dj_opts.min_chars,
+        maxHeight: dj_opts.max_height,
+        width: dj_opts.max_height,
         serviceUrl: $id_input.attr("search_url"),
         onSelect: function(suggestion) {
             $id_input.val(suggestion.data).change();

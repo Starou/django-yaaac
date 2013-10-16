@@ -10,18 +10,17 @@ from test_app import models
 ## Forms ##
 
 class BandMemberForm(forms.ModelForm):
-    band = AutocompleteModelChoiceField(site=admin.site, 
-                                        queryset=models.Band.objects.all(),
+    band = AutocompleteModelChoiceField(site=admin.site, queryset=models.Band.objects.all(),
                                         yaaac_opts={
                                             "search_fields": ["^name"],
+                                            "min_chars": 3,
                                         }, required=True)
     class Meta:
         model = models.BandMember
 
 
 class BandMemberLimitForm(forms.ModelForm):
-    band = AutocompleteModelChoiceField(site=admin.site, 
-                                        queryset=models.Band.objects.all(),
+    band = AutocompleteModelChoiceField(site=admin.site, queryset=models.Band.objects.all(),
                                         limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                                         yaaac_opts={
                                             "search_fields": ["^name"]
@@ -34,7 +33,10 @@ class BandMemberInlineForm(forms.ModelForm):
     favorite_instrument = AutocompleteModelChoiceField(label="Favorite instrument", site=admin.site, 
                                                        queryset=models.Instrument.objects.all(),
                                                        yaaac_opts={
-                                                           "search_fields": ["^name"]
+                                                           "search_fields": ["^name"],
+                                                           "min_chars": 3,
+                                                           "max_height": 200,
+                                                           "width": 150,
                                                        }, required=False)
     class Meta:
         model = models.BandMember

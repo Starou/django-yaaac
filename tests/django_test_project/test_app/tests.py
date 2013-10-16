@@ -238,7 +238,13 @@ class YaaacLiveServerTest(LiveServerTest):
         
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
-        band_search_elem.send_keys("the ")
+        # set to init search when 3 chars at least are entered.
+        band_search_elem.send_keys("th")
+        self.wait_for_ajax()
+        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        self.assertEqual(len(suggestion_elems), 0)
+
+        band_search_elem.send_keys("e ")
         self.wait_for_ajax()
         suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
         self.assertEqual(len(suggestion_elems), 3)
