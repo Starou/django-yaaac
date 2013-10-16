@@ -120,3 +120,16 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
 
 *suggest_by* is optional. It can be a field or a method of the model.
 By default, suggestions are shown using *__unicode__* method.
+
+
+
+Tuning
+======
+
+
+To ease the DOM manipulation, HTML classes are added to the elements. The most interesting being `yaaac_<fieldname>`
+to the hidden input storing the foreign key value. This is very convenient when you need to add behavior to a whole
+set of fields - also those that don't exist when the page is created - sharing the same name. 
+
+Use jQuery delegation (i.e. `$(".foo").on("change", ".yaaac_first_name")`) to place an event on one field for all 
+the inline forms present in the page or to come (i.e. Click on "Add a new Band Member".)
