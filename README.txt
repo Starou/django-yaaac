@@ -127,9 +127,9 @@ Tuning
 ======
 
 
-To ease the DOM manipulation, HTML classes are added to the elements. The most interesting being `yaaac_<fieldname>`
+To ease the DOM manipulation, HTML classes are added to the elements. The most interesting being ``yaaac_<fieldname>``
 to the hidden input storing the foreign key value. This is very convenient when you need to add behavior to a whole
 set of fields - also those that don't exist when the page is created - sharing the same name. 
 
-Use jQuery delegation (i.e. `$(".foo").on("change", ".yaaac_first_name")`) to place an event on one field for all 
+Use jQuery delegation (i.e. ``$(".foo").on("change", ".yaaac_first_name")``) to place an event on one field for all 
 the inline forms present in the page or to come (i.e. Click on "Add a new Band Member".)
