@@ -67,7 +67,7 @@ Usage
 =====
 
 Forms
-'''''
+-----
 
 What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*::
 
@@ -126,7 +126,7 @@ By default, suggestions are shown using *__unicode__* method.
 
 
 Models
-''''''
+------
 
 For security reasons you must open the search view on the models like this::
 
