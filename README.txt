@@ -154,8 +154,8 @@ For security reasons you must open the search view on the models like this::
 The `Yaaac` class must defines the following:
 
 
-- `user_passes_test` is a class method that takes a user and return True or False.
-- `allows_suggest_by` is a list of model fields or methods that can used as return value by the search view.
+- ``user_passes_test`` is a class method that takes a user and return True or False.
+- ``allows_suggest_by`` is a list of model fields or methods that can used as return value by the search view.
 
 
 Tuning
