@@ -28,9 +28,9 @@ def check_permissions(f):
             return HttpResponseNotFound()
         if not options.user_passes_test(request.user):
             return HttpResponseForbidden()
-        if not suggest_by:
+        if not suggest_by and not request.GET.get("pk"):
             return HttpResponseNotFound()
-        if suggest_by not in options.allows_suggest_by:
+        if suggest_by and suggest_by not in options.allows_suggest_by:
             return HttpResponseForbidden()
 
         return f(manager, request, *args, **kwargs)
