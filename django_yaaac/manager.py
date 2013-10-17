@@ -31,7 +31,7 @@ class AutocompleteManager(object):
                 "value": unicode(klass.objects.get(pk=pk))
             })
         search_fields = request.GET.get('search_fields').split(",")
-        suggest_by = request.GET.get('suggest_by') or "__unicode__"
+        suggest_by = request.GET.get('suggest_by')
 
         filter_params = request.GET.copy()
         del filter_params["t"]
@@ -44,7 +44,7 @@ class AutocompleteManager(object):
         result = self.get_search_results(result, search_fields, query)
 
         if suggest_by in klass._meta.get_all_field_names():
-            result = result.values_list('id', search_fields)
+            result = result.values_list('id', suggest_by)
         else:
             result = [(obj.pk, getattr(obj, suggest_by)()) for obj in result]
         result = result or [('', '')]

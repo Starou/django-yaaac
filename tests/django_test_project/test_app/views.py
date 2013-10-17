@@ -14,6 +14,7 @@ class BandMemberForm(forms.ModelForm):
                                         yaaac_opts={
                                             "search_fields": ["^name"],
                                             "min_chars": 3,
+                                            "suggest_by": "get_full_info",
                                         }, required=True)
     class Meta:
         model = models.BandMember

@@ -54,6 +54,8 @@ class Band(models.Model):
     def natural_key(self):
         return (self.name,)
 
+    def get_full_info(self):
+        return u"%s (%s)" % (self.name, self.genre)
 
 
 class BandMember(models.Model):

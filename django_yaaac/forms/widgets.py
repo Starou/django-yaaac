@@ -33,6 +33,7 @@ class AutocompleteWidget(forms.HiddenInput):
             "min_chars": 1,
             "max_height": 300,
             "width": 300,
+            "suggest_by": "__unicode__",
         }
         # opts should not by None.
         self.opts.update(opts)
@@ -56,14 +57,11 @@ class AutocompleteWidget(forms.HiddenInput):
 
         lookup_url = reverse_lazy('%s:%s_%s_changelist' % info, current_app=self.site.name)
         params = self.url_parameters()
-        if params:
-            url_params = '?' + '&'.join('%s=%s' % (k, v) for k, v in params.items())
-        else:
-            url_params = ''
+        url_params = '?' + '&'.join('%s=%s' % (k, v) for k, v in params.items())
 
         attrs.update({
             'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
-            'search_url': "%s%s" % (search_url, url_params),
+            'search_url': "%s%s&suggest_by=%s" % (search_url, url_params, self.opts["suggest_by"]),
             'search_opts': json.dumps(search_opts),
             'search_fields': ",".join(search_fields), 
         })
@@ -73,7 +71,7 @@ class AutocompleteWidget(forms.HiddenInput):
                                               "class": "yaaac_search_input",
                                               "placeholder": "start typing to search",
                                               "style": value and "display:none" or ""}))
-        lookup_elem = format_html('<a {0}><img {1}></img></a>',
+        lookup_elem = format_html('<a {0}><img {1} /></a>',
                                   flatatt({"href": "%s%s" % (lookup_url, url_params),
                                            "id": "lookup_id_%s" % name,
                                            "class": "yaaac_lookup",

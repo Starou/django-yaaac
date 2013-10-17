@@ -13,15 +13,15 @@ class AutocompleteTest(TestCase):
         self.client = Client()
     
     def test_search(self):
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=^name") 
+       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=^name&suggest_by=name") 
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=name") 
+       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=name&suggest_by=get_full_info") 
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ge', u'suggestions': [
-                            {u'data': 1, u'value': u'Genesis'},
-                            {u'data': 6, u'value': u'The Bee Gees'},
+                            {u'data': 1, u'value': u'Genesis (Rock)'},
+                            {u'data': 6, u'value': u'The Bee Gees (Cheese)'},
                         ]})
 
     def test_search_callable(self):
@@ -116,7 +116,7 @@ class YaaacLiveServerTest(LiveServerTest):
         suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
         self.assertEqual(len(suggestion_elems), 3)
         self.assertEqual([elem.text for elem in suggestion_elems],
-                         [u"The Rolling Stones", u"The Stone Roses", "The Bee Gees"])
+                         [u"The Rolling Stones (Blues/Rock)", u"The Stone Roses (Rock)", "The Bee Gees (Cheese)"])
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
@@ -159,6 +159,8 @@ class YaaacLiveServerTest(LiveServerTest):
         self.wait_page_loaded()
         
         band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
+       # import ipdb
+       # ipdb.set_trace()
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
         self.selenium.switch_to_window(main_window)
@@ -249,7 +251,7 @@ class YaaacLiveServerTest(LiveServerTest):
         suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
         self.assertEqual(len(suggestion_elems), 3)
         self.assertEqual([elem.text for elem in suggestion_elems],
-                         [u"The Rolling Stones", u"The Stone Roses", "The Bee Gees"])
+                         [u"The Rolling Stones (Blues/Rock)", u"The Stone Roses (Rock)", "The Bee Gees (Cheese)"])
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
