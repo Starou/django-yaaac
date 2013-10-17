@@ -24,7 +24,6 @@ class AutocompleteTest(TestCase):
                             {u'data': 6, u'value': u'The Bee Gees (Cheese)'},
                         ]})
 
-    def test_search_callable(self):
        response = self.client.get(
            "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name&suggest_by=get_full_name") 
        self.assertEqual(json.loads(response.content),
@@ -32,6 +31,7 @@ class AutocompleteTest(TestCase):
                             {u'data': 1, u'value': u'Phil Collins'},
                             {u'data': 4, u'value': u'Phil Spector'},
                         ]})
+
        response = self.client.get(
            "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name") 
        self.assertEqual(json.loads(response.content),
