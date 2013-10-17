@@ -159,8 +159,6 @@ class YaaacLiveServerTest(LiveServerTest):
         self.wait_page_loaded()
         
         band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
-       # import ipdb
-       # ipdb.set_trace()
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
         self.selenium.switch_to_window(main_window)

@@ -55,6 +55,10 @@ class Band(models.Model):
     name = models.CharField(max_length=100, unique=True)
     genre = models.ForeignKey("MusicGenre", null=True, blank=True)
 
+    class Yaaac:
+        user_passes_test = lambda instance, u: True
+        allows_suggest_by = ['name', 'get_full_info']
+
     def __unicode__(self):
         return self.name
 
@@ -75,6 +79,10 @@ class BandMember(models.Model):
 
     class Meta:
         unique_together = (('first_name', 'last_name'),)
+
+    class Yaaac:
+        user_passes_test = lambda instance, u: True
+        allows_suggest_by = ['get_full_name']
 
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)

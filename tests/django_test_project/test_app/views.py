@@ -24,7 +24,8 @@ class BandMemberLimitForm(forms.ModelForm):
     band = AutocompleteModelChoiceField(site=admin.site, queryset=models.Band.objects.all(),
                                         limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                                         yaaac_opts={
-                                            "search_fields": ["^name"]
+                                            "search_fields": ["^name"],
+                                            "suggest_by": "name",
                                         }, required=True)
     class Meta:
         model = models.BandMember
