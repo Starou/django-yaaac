@@ -5,6 +5,24 @@ from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
 
 
+def cache_model(f):
+    def wrapper(request, *args, **kwargs):
+        app = kwargs["app"]
+        model = kwargs["model"]
+        kwargs["model"] = ContentType.objects.get(app_label=app,
+                                                  model=model).model_class()
+        return f(request, *args, **kwargs)
+    return wrapper
+
+
+def check_permissions(f):
+    def wrapper(request, *args, **kwargs):
+        #import ipdb
+        #ipdb.set_trace()
+        return f(request, *args, **kwargs)
+    return wrapper
+
+
 class AutocompleteManager(object):
     def __init__(self, name="yaaac", app_name="yaaac"):
         self.name = name
@@ -21,14 +39,14 @@ class AutocompleteManager(object):
     def urls(self):
         return self.get_urls(), self.app_name, self.name
 
+    @cache_model
+    @check_permissions
     def search(self, request, app, model):
-        klass = ContentType.objects.get(app_label=app, model=model).model_class()
-
         query = request.GET.get('query')
         pk = request.GET.get('pk')
         if pk:
             return json_response({
-                "value": unicode(klass.objects.get(pk=pk))
+                "value": unicode(model.objects.get(pk=pk))
             })
         search_fields = request.GET.get('search_fields').split(",")
         suggest_by = request.GET.get('suggest_by')
@@ -40,10 +58,10 @@ class AutocompleteManager(object):
         if "suggest_by" in filter_params:
             del filter_params["suggest_by"]
         kwargs = lookup_dict_from_url_params(filter_params)
-        result = klass.objects.filter(**kwargs)
+        result = model.objects.filter(**kwargs)
         result = self.get_search_results(result, search_fields, query)
 
-        if suggest_by in klass._meta.get_all_field_names():
+        if suggest_by in model._meta.get_all_field_names():
             result = result.values_list('id', suggest_by)
         else:
             result = [(obj.pk, getattr(obj, suggest_by)()) for obj in result]
