@@ -21,9 +21,16 @@ class BandMemberManager(models.Manager):
         return self.get(first_name=first_name, last_name=last_name)
 
 
+def can_search_instrument(instance, user):
+    return user and user.is_authenticated() or False
+
 class Instrument(models.Model):
     objects = InstrumentManager()
     name = models.CharField(max_length=64, unique=True)
+
+    class Yaaac:
+        user_passes_test = can_search_instrument
+        allows_suggest_by = ['__unicode__']
 
     def __unicode__(self):
         return self.name

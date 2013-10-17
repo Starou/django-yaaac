@@ -1,25 +1,39 @@
 import operator
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
 
 
 def cache_model(f):
-    def wrapper(request, *args, **kwargs):
+    def wrapper(manager, request, *args, **kwargs):
         app = kwargs["app"]
         model = kwargs["model"]
         kwargs["model"] = ContentType.objects.get(app_label=app,
                                                   model=model).model_class()
-        return f(request, *args, **kwargs)
+        return f(manager, request, *args, **kwargs)
     return wrapper
 
 
 def check_permissions(f):
-    def wrapper(request, *args, **kwargs):
-        #import ipdb
-        #ipdb.set_trace()
-        return f(request, *args, **kwargs)
+    def wrapper(manager, request, *args, **kwargs):
+        model = kwargs["model"]
+        suggest_by = request.GET.get('suggest_by')
+        try:
+            options = model.Yaaac()
+            options.user_passes_test
+            options.allows_suggest_by
+        except AttributeError:
+            return HttpResponseNotFound()
+        if not options.user_passes_test(request.user):
+            return HttpResponseForbidden()
+        if not suggest_by:
+            return HttpResponseNotFound()
+        if suggest_by not in options.allows_suggest_by:
+            return HttpResponseForbidden()
+
+        return f(manager, request, *args, **kwargs)
     return wrapper
 
 
