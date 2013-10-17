@@ -51,6 +51,16 @@ class AutocompleteTest(TestCase):
        response = self.client.get("/yaaac/test_app/band/search/?pk=1") 
        self.assertEqual(json.loads(response.content), {'value': 'Genesis'})
 
+    def test_search_not_found(self):
+       response = self.client.get("/yaaac/auth/user/search/?t=id&query=super&search_fields=^username&suggest_by=password") 
+       self.assertEqual(response.status_code, 404)
+       response = self.client.get("/yaaac/auth/user/search/?pk=1") 
+       self.assertEqual(response.status_code, 404)
+
+    def test_search_not_allowed(self):
+       response = self.client.get("/yaaac/test_app/instrument/search/?t=id&query=gui&search_fields=^name&suggest_by=__unicode__") 
+       self.assertEqual(response.status_code, 403)
+
 
 class LiveServerTest(LiveServerTestCase):
     """Abstract class with helpers from django/contrib/admin/tests.py """
