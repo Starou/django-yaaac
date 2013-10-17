@@ -66,6 +66,9 @@ In the *urls.py* module of your project, define the url pattern for ajax calls::
 Usage
 =====
 
+Forms
+'''''
+
 What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*::
 
 
@@ -121,6 +124,38 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
 *suggest_by* is optional. It can be a field or a method of the model.
 By default, suggestions are shown using *__unicode__* method.
 
+
+Models
+''''''
+
+For security reasons you must open the search view on the models like this::
+
+    class BandMember(models.Model):
+        plain_stupid_password = models.CharField(max_length=4)
+        first_name = models.CharField(max_length=100)
+        last_name = models.CharField(max_length=100)
+        band = models.ForeignKey("Band", null=True, blank=True)
+        favorite_instrument = models.ForeignKey("Instrument", null=True, blank=True)
+
+        class Meta:
+            unique_together = (('first_name', 'last_name'),)
+
+        class Yaaac:
+            user_passes_test = lambda instance, user: user and user.is_authenticated() or False 
+            allows_suggest_by = ['get_full_name']
+
+        def __unicode__(self):
+            return u"%s %s" % (self.first_name, self.last_name)
+
+        def get_full_name(self):
+            return u"%s %s" % (self.first_name, self.last_name)
+
+
+The `Yaaac` class must defines the following:
+
+
+- `user_passes_test` is a class method that takes a user and return True or False.
+- `allows_suggest_by` is a list of model fields or methods that can used as return value by the search view.
 
 
 Tuning
