@@ -8,6 +8,11 @@ var yaaac_set_label = function() {
                 var $lookup_elem = $search_input.next();
                 var $value_container = $search_input.siblings(".yaaac_value_container");
                 var $value_elem = $value_container.find(".yaaac_value");
+                var $value_elem_with_link = $value_elem.find("a");
+                if ($value_elem_with_link) {
+                    $value_elem_with_link.attr("href", data.url);
+                    $value_elem = $value_elem_with_link;
+                }
                 $value_elem.html(data.value);
 
                 $search_input.hide();

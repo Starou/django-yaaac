@@ -84,7 +84,7 @@ class AutocompleteWidget(forms.HiddenInput):
 
     def value_elem(self, value):
         style = 'display:none'
-        label = ''
+        label = hasattr(self.model, "get_absolute_url") and format_html('<a></a>') or ''
         clear_elem = format_html('<span class="yaaac_clear_value">x</span>')
         if value:
             obj = self.model._default_manager.get(pk=value)

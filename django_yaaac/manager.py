@@ -59,8 +59,14 @@ class AutocompleteManager(object):
         query = request.GET.get('query')
         pk = request.GET.get('pk')
         if pk:
+            obj = model.objects.get(pk=pk)
+            try:
+                url = obj.get_absolute_url()
+            except AttributeError:
+                url = None
             return json_response({
-                "value": unicode(model.objects.get(pk=pk))
+                "value": unicode(obj),
+                "url": url,
             })
         search_fields = request.GET.get('search_fields').split(",")
         suggest_by = request.GET.get('suggest_by')
