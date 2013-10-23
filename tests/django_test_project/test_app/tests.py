@@ -387,8 +387,9 @@ class YaaacLiveServerTest(LiveServerTest):
             '//tr[@id="bandmember_set-0"]//span[@class="yaaac_value_container"]')
         self.assertTrue(fav_value_container.is_displayed())
         fav_value_elem = self.selenium.find_element_by_xpath(
-            '//tr[@id="bandmember_set-0"]//span[@class="yaaac_value"]')
+            '//tr[@id="bandmember_set-0"]//span[@class="yaaac_value"]/a')
         self.assertEqual(fav_value_elem.text, "Drums")
+        self.assertEqual(fav_value_elem.get_attribute("href"), "http://en.wikipedia.org/wiki/Drums")
 
         # But not Tony Banks...
         fav_search_elem = self.selenium.find_element_by_xpath(
@@ -398,7 +399,7 @@ class YaaacLiveServerTest(LiveServerTest):
             '//tr[@id="bandmember_set-2"]//span[@class="yaaac_value_container"]')
         self.assertFalse(fav_value_container.is_displayed())
         fav_value_elem = self.selenium.find_element_by_xpath(
-            '//tr[@id="bandmember_set-2"]//span[@class="yaaac_value"]')
+            '//tr[@id="bandmember_set-2"]//span[@class="yaaac_value"]/a')
         self.assertEqual(fav_value_elem.text, "")
 
         # Let's start searching a favorite instrument for Tony.
@@ -414,6 +415,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertFalse(fav_search_elem.is_displayed())
         self.assertTrue(fav_value_container.is_displayed())
         self.assertEqual(fav_value_elem.text, "Keyboards")
+        self.assertEqual(fav_value_elem.get_attribute("href"), "http://en.wikipedia.org/wiki/Keyboards")
 
         # Clear the choice.
         self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-2"]//*[@class="yaaac_clear_value"]').click()
@@ -446,8 +448,9 @@ class YaaacLiveServerTest(LiveServerTest):
         fav_value_container = self.selenium.find_element_by_xpath(
             '//tr[@id="bandmember_set-3"]//span[@class="yaaac_value_container"]')
         self.assertTrue(fav_value_container.is_displayed())
-        fav_value_elem = self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-3"]//span[@class="yaaac_value"]')
+        fav_value_elem = self.selenium.find_element_by_xpath('//tr[@id="bandmember_set-3"]//span[@class="yaaac_value"]/a')
         self.assertEqual(fav_value_elem.text, "Guitare")
+        self.assertEqual(fav_value_elem.get_attribute("href"), "http://en.wikipedia.org/wiki/Guitare")
 
         # Save the form. Check models.
         self.selenium.find_element_by_name("_save").click()
