@@ -124,6 +124,8 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
 *suggest_by* is optional. It can be a field or a method of the model.
 By default, suggestions are shown using *__unicode__* method.
 
+If your model define a ``get_absolute_url()`` method, the label is a link to that resource.
+
 
 Models
 ------
