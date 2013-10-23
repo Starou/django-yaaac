@@ -135,8 +135,6 @@ class YaaacLiveServerTest(LiveServerTest):
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
-        import ipdb
-        ipdb.set_trace()
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
         # Clear the choice.
