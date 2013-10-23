@@ -90,6 +90,12 @@ class AutocompleteWidget(forms.HiddenInput):
             obj = self.model._default_manager.get(pk=value)
             label = Truncator(obj).words(14, truncate=" ...")
             style = ''
+            try:
+                url = obj.get_absolute_url()
+            except AttributeError:
+                pass
+            else:
+                label = format_html(u'<a{0}>{1}</a>', flatatt({"href": url}), label)
         label_elem = format_html(u'<span{0}>{1}</span>', flatatt({"class": "yaaac_value"}), label)
         return format_html(u'<span{0}>{1}{2}</span>',
                            flatatt({"class": "yaaac_value_container", "style": style}),

@@ -38,6 +38,9 @@ class Instrument(models.Model):
     def natural_key(self):
         return (self.name,)
 
+    def get_absolute_url(self):
+        return "http://en.wikipedia.org/wiki/%s" % self.name
+
 
 class MusicGenre(models.Model):
     objects = MusicGenreManager()
