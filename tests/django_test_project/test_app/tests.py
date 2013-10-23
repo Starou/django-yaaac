@@ -49,7 +49,7 @@ class AutocompleteTest(TestCase):
 
     def test_search_with_pk(self):
        response = self.client.get("/yaaac/test_app/band/search/?pk=1") 
-       self.assertEqual(json.loads(response.content), {'value': 'Genesis'})
+       self.assertEqual(json.loads(response.content), {'value': 'Genesis', 'url': None})
 
     def test_search_not_found(self):
        response = self.client.get("/yaaac/auth/user/search/?t=id&query=super&search_fields=^username&suggest_by=password") 
@@ -135,6 +135,8 @@ class YaaacLiveServerTest(LiveServerTest):
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        import ipdb
+        ipdb.set_trace()
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
         # Clear the choice.
