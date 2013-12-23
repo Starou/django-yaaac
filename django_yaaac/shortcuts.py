@@ -14,4 +14,4 @@ def encode_default(d):
 
 def json_response(data):
     return HttpResponse(json.dumps(data, default=encode_default),
-                        mimetype='application/json')
+                        content_type='application/json')
