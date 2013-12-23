@@ -80,9 +80,9 @@ var yaaac_open_lookup = function() {
     var href = $(this).attr("href");
     // FIXME : django >= 1.6 use _popup.
     if (href.search(/\?/) >= 0) {
-        href += '&pop=1';
+        href += '&' + POPUP_VAR + '=1';
     } else {
-        href += '?pop=1';
+        href += '?' + POPUP_VAR + '=1';
     }
     var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
     win.focus();

@@ -12,6 +12,12 @@ from django.utils.text import Truncator
 from django_yaaac.utils import clean_fieldname_prefix
 
 
+
+JS_COMPAT_FILE = "yaaac_compat.js"
+if DJ_VERSION < (1, 6):
+    JS_COMPAT_FILE = "yaaac_compat_legacy.js"
+
+
 class AutocompleteWidget(forms.HiddenInput):
     is_hidden = False
 
@@ -23,6 +29,7 @@ class AutocompleteWidget(forms.HiddenInput):
         }
         js = (
             static('django_yaaac/js/jquery.autocomplete.min.js'),
+            static('django_yaaac/js/%s' % JS_COMPAT_FILE),
             static('django_yaaac/js/yaaac_autocomplete.js'),
         )
 
