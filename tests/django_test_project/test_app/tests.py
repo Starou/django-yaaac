@@ -7,6 +7,13 @@ from django.test.client import Client
 from test_app import models
 from selenium.webdriver.firefox.webdriver import WebDriver
 
+from django import VERSION
+LIVE_SERVER_CLASS = LiveServerTestCase
+print VERSION
+if VERSION >= (1, 7):
+    from django.contrib.staticfiles.testing import StaticLiveServerCase
+    LIVE_SERVER_CLASS = StaticLiveServerCase
+
 
 class AutocompleteTest(TestCase):
     def setUp(self):
@@ -63,7 +70,7 @@ class AutocompleteTest(TestCase):
        self.assertEqual(response.status_code, 403)
 
 
-class LiveServerTest(LiveServerTestCase):
+class LiveServerTest(LIVE_SERVER_CLASS):
     """Abstract class with helpers from django/contrib/admin/tests.py """
     @classmethod
     def setUpClass(cls):
