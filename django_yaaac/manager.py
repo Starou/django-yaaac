@@ -1,4 +1,5 @@
 import operator
+from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden
@@ -44,7 +45,8 @@ class AutocompleteManager(object):
 
     def get_urls(self):
         from django.conf.urls import patterns, url
-        urlpatterns = patterns('',
+        urlpatterns = patterns(
+            '',
             url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         )
         return urlpatterns
@@ -72,7 +74,7 @@ class AutocompleteManager(object):
         suggest_by = request.GET.get('suggest_by')
 
         filter_params = request.GET.copy()
-        del filter_params["t"]
+        del filter_params[TO_FIELD_VAR]
         del filter_params["query"]
         del filter_params["search_fields"]
         if "suggest_by" in filter_params:

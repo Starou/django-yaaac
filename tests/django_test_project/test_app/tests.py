@@ -1,5 +1,6 @@
 import json
 import time
+from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.auth.models import User
 from django.test import TestCase, LiveServerTestCase
 from django.test.client import Client
@@ -11,13 +12,13 @@ class AutocompleteTest(TestCase):
     def setUp(self):
         super(AutocompleteTest, self).setUp()
         self.client = Client()
-    
+
     def test_search(self):
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=^name&suggest_by=name") 
+       response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
-       response = self.client.get("/yaaac/test_app/band/search/?t=id&query=ge&search_fields=name&suggest_by=get_full_info") 
+       response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ge', u'suggestions': [
                             {u'data': 1, u'value': u'Genesis (Rock)'},
@@ -25,7 +26,7 @@ class AutocompleteTest(TestCase):
                         ]})
 
        response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name&suggest_by=get_full_name") 
+           "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ph', u'suggestions': [
                             {u'data': 1, u'value': u'Phil Collins'},
@@ -33,7 +34,7 @@ class AutocompleteTest(TestCase):
                         ]})
 
        response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?t=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name") 
+           "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ph', u'suggestions': [
                             {u'data': 1, u'value': u'Phil Collins'},
@@ -41,24 +42,24 @@ class AutocompleteTest(TestCase):
                         ]})
 
        response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?t=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name") 
+           "/yaaac/test_app/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
        self.assertEqual(json.loads(response.content),
                         {u'query': u'ph col', u'suggestions': [
                             {u'data': 1, u'value': u'Phil Collins'},
                         ]})
 
     def test_search_with_pk(self):
-       response = self.client.get("/yaaac/test_app/band/search/?pk=1") 
+       response = self.client.get("/yaaac/test_app/band/search/?pk=1")
        self.assertEqual(json.loads(response.content), {'value': 'Genesis', 'url': None})
 
     def test_search_not_found(self):
-       response = self.client.get("/yaaac/auth/user/search/?t=id&query=super&search_fields=^username&suggest_by=password") 
+       response = self.client.get("/yaaac/auth/user/search/?%s=id&query=super&search_fields=^username&suggest_by=password" % TO_FIELD_VAR)
        self.assertEqual(response.status_code, 404)
-       response = self.client.get("/yaaac/auth/user/search/?pk=1") 
+       response = self.client.get("/yaaac/auth/user/search/?pk=1")
        self.assertEqual(response.status_code, 404)
 
     def test_search_not_allowed(self):
-       response = self.client.get("/yaaac/test_app/instrument/search/?t=id&query=gui&search_fields=^name&suggest_by=__unicode__") 
+       response = self.client.get("/yaaac/test_app/instrument/search/?%s=id&query=gui&search_fields=^name&suggest_by=__unicode__" % TO_FIELD_VAR)
        self.assertEqual(response.status_code, 403)
 
 
@@ -113,7 +114,7 @@ class LiveServerTest(LiveServerTestCase):
             '//input[@value="%s"]' % login_text).click()
         self.wait_page_loaded()
 
-            
+
 class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
@@ -167,7 +168,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
-        
+
         band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
@@ -222,7 +223,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
-        
+
         band_link = self.selenium.find_element_by_xpath("//tr[1]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
@@ -245,7 +246,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
         self.selenium.get('%s/admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
-        
+
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
         # set to init search when 3 chars at least are entered.
@@ -301,7 +302,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
-        
+
         band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
@@ -357,7 +358,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.switch_to_window('id_band')
         self.wait_page_loaded()
-        
+
         band_link = self.selenium.find_element_by_xpath("//tr[1]//a")
         self.assertEqual(band_link.text, "SuperHeavy")
         band_link.click()
