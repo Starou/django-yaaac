@@ -16,8 +16,10 @@ class BandMemberForm(forms.ModelForm):
                                             "min_chars": 3,
                                             "suggest_by": "get_full_info",
                                         }, required=True)
+
     class Meta:
         model = models.BandMember
+        exclude = ()
 
 
 class BandMemberLimitForm(forms.ModelForm):
@@ -27,12 +29,14 @@ class BandMemberLimitForm(forms.ModelForm):
                                             "search_fields": ["^name"],
                                             "suggest_by": "name",
                                         }, required=True)
+
     class Meta:
         model = models.BandMember
+        exclude = ()
 
 
 class BandMemberInlineForm(forms.ModelForm):
-    favorite_instrument = AutocompleteModelChoiceField(label="Favorite instrument", site=admin.site, 
+    favorite_instrument = AutocompleteModelChoiceField(label="Favorite instrument", site=admin.site,
                                                        queryset=models.Instrument.objects.all(),
                                                        yaaac_opts={
                                                            "search_fields": ["^name"],
@@ -40,8 +44,10 @@ class BandMemberInlineForm(forms.ModelForm):
                                                            "max_height": 200,
                                                            "width": 150,
                                                        }, required=False)
+
     class Meta:
         model = models.BandMember
+        exclude = ()
 
 
 ## Views ##
