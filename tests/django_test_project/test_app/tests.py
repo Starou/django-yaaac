@@ -9,7 +9,6 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 from django import VERSION
 LIVE_SERVER_CLASS = LiveServerTestCase
-print VERSION
 if VERSION >= (1, 7):
     from django.contrib.staticfiles.testing import StaticLiveServerCase
     LIVE_SERVER_CLASS = StaticLiveServerCase
