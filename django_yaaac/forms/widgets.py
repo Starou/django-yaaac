@@ -1,4 +1,6 @@
 import json
+import uuid
+
 from django import VERSION as DJ_VERSION
 from django import forms
 from django.contrib.admin.templatetags.admin_static import static
@@ -33,7 +35,8 @@ class AutocompleteWidget(forms.HiddenInput):
             static('django_yaaac/js/yaaac_autocomplete.js'),
         )
 
-    def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None):
+    def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None, queryset_id=None):
+        self.queryset_id = queryset_id
         self.site = site
         self.model = model
         self.opts = {
@@ -55,8 +58,11 @@ class AutocompleteWidget(forms.HiddenInput):
         else:
             model_name = self.model._meta.model_name
         info = (self.site.name, app_label, model_name)
-        search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name})
-        
+        if self.queryset_id is not None:
+            search_url = reverse_lazy("yaaac:search_with_queryset_id", kwargs={"app": app_label, "model": model_name, "queryset_id": self.queryset_id, })
+        else:
+            search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name, })
+
         # Cannot just do self.opts.pop("search_fields") because render() must be side-effect free.
         search_fields = self.opts.get("search_fields")
         search_opts = self.opts.copy()
@@ -70,7 +76,7 @@ class AutocompleteWidget(forms.HiddenInput):
             'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
             'search_url': "%s%s&suggest_by=%s" % (search_url, url_params, self.opts["suggest_by"]),
             'search_opts': json.dumps(search_opts),
-            'search_fields': ",".join(search_fields), 
+            'search_fields': ",".join(search_fields),
         })
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)
         autocomp_input = format_html('<input{0} />',
@@ -85,7 +91,7 @@ class AutocompleteWidget(forms.HiddenInput):
                                           "style": value and "display:none" or ""}),
                                   flatatt({"width": "16", "height": "16", "alt": "Lookup",
                                            "src": static('django_yaaac/img/selector-search.gif')}))
-        
+
         return format_html(u'<span class="yaaac_container">{0}{1}{2}{3}</span>',
                            hidden_input, autocomp_input, lookup_elem, self.value_elem(value))
 
