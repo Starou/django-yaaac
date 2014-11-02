@@ -15,6 +15,8 @@ if VERSION >= (1, 7):
 
 
 class AutocompleteTest(TestCase):
+    fixtures = ["test_app/initial.json"]
+
     def setUp(self):
         super(AutocompleteTest, self).setUp()
         self.client = Client()
@@ -71,6 +73,8 @@ class AutocompleteTest(TestCase):
 
 class LiveServerTest(LIVE_SERVER_CLASS):
     """Abstract class with helpers from django/contrib/admin/tests.py """
+    fixtures = ["test_app/initial.json"]
+
     @classmethod
     def setUpClass(cls):
         cls.selenium = WebDriver()
