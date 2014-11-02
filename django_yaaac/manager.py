@@ -49,7 +49,8 @@ class AutocompleteManager(object):
         from django.conf.urls import patterns, url
         urlpatterns = patterns(
             '',
-            url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$', self.search, name='search_with_queryset_id'),
+            url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
+                self.search, name='search_with_queryset_id'),
             url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         )
         return urlpatterns
@@ -132,7 +133,7 @@ class AutocompleteManager(object):
                 self.registered_querysets[uuid] = queryset
                 break
             else:
-                queryset_id +=1
+                queryset_id += 1
         return queryset_id
 
 autocomplete = AutocompleteManager()

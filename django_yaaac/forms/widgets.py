@@ -1,5 +1,4 @@
 import json
-import uuid
 
 from django import VERSION as DJ_VERSION
 from django import forms
@@ -12,7 +11,6 @@ else:
 from django.utils.html import format_html
 from django.utils.text import Truncator
 from django_yaaac.utils import clean_fieldname_prefix
-
 
 
 JS_COMPAT_FILE = "yaaac_compat.js"
@@ -59,9 +57,14 @@ class AutocompleteWidget(forms.HiddenInput):
             model_name = self.model._meta.model_name
         info = (self.site.name, app_label, model_name)
         if self.queryset_id is not None:
-            search_url = reverse_lazy("yaaac:search_with_queryset_id", kwargs={"app": app_label, "model": model_name, "queryset_id": self.queryset_id, })
+            search_url = reverse_lazy("yaaac:search_with_queryset_id",
+                                      kwargs={"app": app_label,
+                                              "model": model_name,
+                                              "queryset_id": self.queryset_id})
         else:
-            search_url = reverse_lazy("yaaac:search", kwargs={"app": app_label, "model": model_name, })
+            search_url = reverse_lazy("yaaac:search",
+                                      kwargs={"app": app_label,
+                                              "model": model_name})
 
         # Cannot just do self.opts.pop("search_fields") because render() must be side-effect free.
         search_fields = self.opts.get("search_fields")
@@ -121,5 +124,5 @@ class AutocompleteWidget(forms.HiddenInput):
     def url_parameters(self):
         from django.contrib.admin.views.main import TO_FIELD_VAR
         params = self.base_url_parameters()
-        params.update({TO_FIELD_VAR: "id"}) # Hardcoded here because we do not have 'rel' object.
+        params.update({TO_FIELD_VAR: "id"})  # Hardcoded here because we do not have 'rel' object.
         return params
