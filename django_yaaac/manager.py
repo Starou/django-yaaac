@@ -5,6 +5,7 @@ from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
+from django import VERSION as DJ_VERSION
 
 
 def cache_model(f):
@@ -39,25 +40,28 @@ def check_permissions(f):
 
 
 class AutocompleteManager(object):
-    def __init__(self, name="yaaac", app_name="yaaac"):
+    def __init__(self, name="yaaac", app_label="yaaac"):
         self.name = name
-        self.app_name = app_name
+        self.app_label = app_label
+        self.registered_querysets = {}
 
     def get_urls(self):
         from django.conf.urls import patterns, url
         urlpatterns = patterns(
             '',
+            url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
+                self.search, name='search_with_queryset_id'),
             url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         )
         return urlpatterns
 
     @property
     def urls(self):
-        return self.get_urls(), self.app_name, self.name
+        return self.get_urls(), self.app_label, self.name
 
     @cache_model
     @check_permissions
-    def search(self, request, app, model):
+    def search(self, request, app, model, queryset_id=None):
         query = request.GET.get('query')
         pk = request.GET.get('pk')
         if pk:
@@ -80,7 +84,15 @@ class AutocompleteManager(object):
         if "suggest_by" in filter_params:
             del filter_params["suggest_by"]
         kwargs = lookup_dict_from_url_params(filter_params)
-        result = model.objects.filter(**kwargs)
+        if queryset_id is not None:
+            if DJ_VERSION < (1, 6):
+                model_name = model._meta.module_name
+            else:
+                model_name = model._meta.model_name
+            uuid = '%s-%s-%s' % (app, model_name, queryset_id)
+            result = self.registered_querysets[uuid].filter(**kwargs)
+        else:
+            result = model.objects.filter(**kwargs)
         result = self.get_search_results(result, search_fields, query)
 
         if suggest_by in model._meta.get_all_field_names():
@@ -113,5 +125,15 @@ class AutocompleteManager(object):
             queryset = queryset.filter(reduce(operator.or_, or_queries))
         return queryset
 
+    def register_queryset(self, app_label, model_name, queryset):
+        queryset_id = 0
+        while True:
+            uuid = '%s-%s-%s' % (app_label, model_name, queryset_id)
+            if not uuid in self.registered_querysets:
+                self.registered_querysets[uuid] = queryset
+                break
+            else:
+                queryset_id += 1
+        return queryset_id
 
 autocomplete = AutocompleteManager()
