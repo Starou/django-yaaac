@@ -1,7 +1,6 @@
 import json
 import time
 from django.contrib.admin.views.main import TO_FIELD_VAR
-from django.contrib.auth.models import User
 from django.test import TestCase, LiveServerTestCase
 from django.test.client import Client
 from test_app import models
@@ -10,67 +9,71 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from django import VERSION
 LIVE_SERVER_CLASS = LiveServerTestCase
 if VERSION >= (1, 7):
-    from django.contrib.staticfiles.testing import StaticLiveServerCase
-    LIVE_SERVER_CLASS = StaticLiveServerCase
+    from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+    LIVE_SERVER_CLASS = StaticLiveServerTestCase
 
 
 class AutocompleteTest(TestCase):
+    fixtures = ["test_app/initial.json"]
+
     def setUp(self):
         super(AutocompleteTest, self).setUp()
         self.client = Client()
 
     def test_search(self):
-       response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
-       self.assertEqual(json.loads(response.content),
-                        {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
+        response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
+        self.assertEqual(json.loads(response.content),
+                         {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
-       response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
-       self.assertEqual(json.loads(response.content),
-                        {u'query': u'ge', u'suggestions': [
-                            {u'data': 1, u'value': u'Genesis (Rock)'},
-                            {u'data': 6, u'value': u'The Bee Gees (Cheese)'},
-                        ]})
+        response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
+        self.assertEqual(json.loads(response.content),
+                         {u'query': u'ge', u'suggestions': [
+                             {u'data': 1, u'value': u'Genesis (Rock)'},
+                             {u'data': 6, u'value': u'The Bee Gees (Cheese)'},
+                         ]})
 
-       response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-       self.assertEqual(json.loads(response.content),
-                        {u'query': u'ph', u'suggestions': [
-                            {u'data': 1, u'value': u'Phil Collins'},
-                            {u'data': 4, u'value': u'Phil Spector'},
-                        ]})
+        response = self.client.get(
+            "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+        self.assertEqual(json.loads(response.content),
+                         {u'query': u'ph', u'suggestions': [
+                             {u'data': 1, u'value': u'Phil Collins'},
+                             {u'data': 4, u'value': u'Phil Spector'},
+                         ]})
 
-       response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-       self.assertEqual(json.loads(response.content),
-                        {u'query': u'ph', u'suggestions': [
-                            {u'data': 1, u'value': u'Phil Collins'},
-                            {u'data': 4, u'value': u'Phil Spector'},
-                        ]})
+        response = self.client.get(
+            "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+        self.assertEqual(json.loads(response.content),
+                         {u'query': u'ph', u'suggestions': [
+                             {u'data': 1, u'value': u'Phil Collins'},
+                             {u'data': 4, u'value': u'Phil Spector'},
+                         ]})
 
-       response = self.client.get(
-           "/yaaac/test_app/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-       self.assertEqual(json.loads(response.content),
-                        {u'query': u'ph col', u'suggestions': [
-                            {u'data': 1, u'value': u'Phil Collins'},
-                        ]})
+        response = self.client.get(
+            "/yaaac/test_app/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+        self.assertEqual(json.loads(response.content),
+                         {u'query': u'ph col', u'suggestions': [
+                             {u'data': 1, u'value': u'Phil Collins'},
+                         ]})
 
     def test_search_with_pk(self):
-       response = self.client.get("/yaaac/test_app/band/search/?pk=1")
-       self.assertEqual(json.loads(response.content), {'value': 'Genesis', 'url': None})
+        response = self.client.get("/yaaac/test_app/band/search/?pk=1")
+        self.assertEqual(json.loads(response.content), {'value': 'Genesis', 'url': None})
 
     def test_search_not_found(self):
-       response = self.client.get("/yaaac/auth/user/search/?%s=id&query=super&search_fields=^username&suggest_by=password" % TO_FIELD_VAR)
-       self.assertEqual(response.status_code, 404)
-       response = self.client.get("/yaaac/auth/user/search/?pk=1")
-       self.assertEqual(response.status_code, 404)
+        response = self.client.get("/yaaac/auth/user/search/?%s=id&query=super&search_fields=^username&suggest_by=password" % TO_FIELD_VAR)
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get("/yaaac/auth/user/search/?pk=1")
+        self.assertEqual(response.status_code, 404)
 
     def test_search_not_allowed(self):
-       response = self.client.get("/yaaac/test_app/instrument/search/?%s=id&query=gui&search_fields=^name&suggest_by=__unicode__" % TO_FIELD_VAR)
-       self.assertEqual(response.status_code, 403)
+        response = self.client.get("/yaaac/test_app/instrument/search/?%s=id&query=gui&search_fields=^name&suggest_by=__unicode__" % TO_FIELD_VAR)
+        self.assertEqual(response.status_code, 403)
 
 
 class LiveServerTest(LIVE_SERVER_CLASS):
     """Abstract class with helpers from django/contrib/admin/tests.py """
+    fixtures = ["test_app/initial.json"]
+
     @classmethod
     def setUpClass(cls):
         cls.selenium = WebDriver()
@@ -467,4 +470,5 @@ class YaaacLiveServerTest(LiveServerTest):
                 (u'Tony', u'Banks', None),
                 (u'Phil', u'Collins', u'Drums'),
                 (u'Peter', u'Gabriel', u'Vocals'),
-                (u'Steeve', u'Hackett', u'Guitare')])
+                (u'Steeve', u'Hackett', u'Guitare')
+            ])
