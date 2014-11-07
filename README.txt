@@ -2,6 +2,23 @@
 Another Ajax Auto-Complete, Yet
 ===============================
 
+
+.. image:: https://coveralls.io/repos/Starou/django-yaaac/badge.png
+  :target: https://coveralls.io/r/Starou/django-yaaac
+
+.. image:: https://pypip.in/v/django-yaaac/badge.png
+  :target: https://pypi.python.org/pypi/django-yaaac
+
+.. image:: https://pypip.in/py_versions/django-yaaac/badge.svg
+    :target: https://pypi.python.org/pypi/django-yaaac/
+    :alt: Supported Python versions
+
+.. image:: https://pypip.in/license/django-yaaac/badge.svg
+    :target: https://pypi.python.org/pypi/django-yaaac/
+    :alt: License
+
+
+
 *Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition 
 to the *raw_id_fields* related lookup and - *cerise sur le gateau* - it is usable outside the admin.
 

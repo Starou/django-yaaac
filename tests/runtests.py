@@ -44,6 +44,19 @@ if __name__ == '__main__':
     only = None
     if len(sys.argv) > 1:
         only = sys.argv[1]
+
+    # run django tests.
+    if only is None:
+        sys.path.insert(0, '../..')
+        sys.path.insert(0, './django_test_project')
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'django_test_project.settings'
+        os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '127.0.0.1:8082'
+        import django
+        from django.test.runner import DiscoverRunner
+        django.setup()
+        runner = DiscoverRunner()
+        runner.run_tests(['test_app'])
+
     suites = load_suite_tests(only=only)
     suite = unittest.TestSuite(suites)
     unittest.TextTestRunner(verbosity=2).run(suite)
