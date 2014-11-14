@@ -1,13 +1,10 @@
 tests:
-	@python runtests.py
-
-runserver:
-	@cd django_test_project ; PYTHONPATH=../..:${PYTHONPATH} python manage.py runserver;
+	@PYTHONPATH=..:${PYTHONPATH} python runtests.py --liveserver="127.0.0.1:8000"
 
 coveralls:
-	@coverage run --rcfile=coveragerc runtests.py
+	@PYTHONPATH=..:${PYTHONPATH} coverage run --rcfile=coveragerc runtests.py --liveserver="127.0.0.1:8000"
 	@coveralls -y coveralls.yaml -d .coverage
 
 coverage:
-	@coverage run --rcfile=coveragerc runtests.py
+	@PYTHONPATH=..:${PYTHONPATH} coverage run --rcfile=coveragerc runtests.py --liveserver="127.0.0.1:8000"
 	@coverage report -m
