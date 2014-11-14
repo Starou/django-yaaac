@@ -2,8 +2,9 @@ import json
 import time
 from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.test import TestCase, LiveServerTestCase
+from django.test import override_settings
 from django.test.client import Client
-from test_app import models
+from . import models
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 from django import VERSION
@@ -12,20 +13,20 @@ if VERSION >= (1, 7):
     from django.contrib.staticfiles.testing import StaticLiveServerTestCase
     LIVE_SERVER_CLASS = StaticLiveServerTestCase
 
-
+@override_settings(ROOT_URLCONF="autocomplete.urls")
 class AutocompleteTest(TestCase):
-    fixtures = ["test_app/initial.json"]
+    fixtures = ["autocomplete/initial.json"]
 
     def setUp(self):
         super(AutocompleteTest, self).setUp()
         self.client = Client()
 
     def test_search(self):
-        response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
+        response = self.client.get("/yaaac/autocomplete/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
         self.assertEqual(json.loads(response.content),
                          {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
-        response = self.client.get("/yaaac/test_app/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
+        response = self.client.get("/yaaac/autocomplete/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
         self.assertEqual(json.loads(response.content),
                          {u'query': u'ge', u'suggestions': [
                              {u'data': 1, u'value': u'Genesis (Rock)'},
@@ -33,7 +34,7 @@ class AutocompleteTest(TestCase):
                          ]})
 
         response = self.client.get(
-            "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+            "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
         self.assertEqual(json.loads(response.content),
                          {u'query': u'ph', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
@@ -41,7 +42,7 @@ class AutocompleteTest(TestCase):
                          ]})
 
         response = self.client.get(
-            "/yaaac/test_app/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+            "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
         self.assertEqual(json.loads(response.content),
                          {u'query': u'ph', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
@@ -49,14 +50,14 @@ class AutocompleteTest(TestCase):
                          ]})
 
         response = self.client.get(
-            "/yaaac/test_app/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
+            "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
         self.assertEqual(json.loads(response.content),
                          {u'query': u'ph col', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
                          ]})
 
     def test_search_with_pk(self):
-        response = self.client.get("/yaaac/test_app/band/search/?pk=1")
+        response = self.client.get("/yaaac/autocomplete/band/search/?pk=1")
         self.assertEqual(json.loads(response.content), {'value': 'Genesis', 'url': None})
 
     def test_search_not_found(self):
@@ -66,13 +67,13 @@ class AutocompleteTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_search_not_allowed(self):
-        response = self.client.get("/yaaac/test_app/instrument/search/?%s=id&query=gui&search_fields=^name&suggest_by=__unicode__" % TO_FIELD_VAR)
+        response = self.client.get("/yaaac/autocomplete/instrument/search/?%s=id&query=gui&search_fields=^name&suggest_by=__unicode__" % TO_FIELD_VAR)
         self.assertEqual(response.status_code, 403)
 
 
 class LiveServerTest(LIVE_SERVER_CLASS):
     """Abstract class with helpers from django/contrib/admin/tests.py """
-    fixtures = ["test_app/initial.json"]
+    fixtures = ["autocomplete/initial.json"]
 
     @classmethod
     def setUpClass(cls):
@@ -124,6 +125,7 @@ class LiveServerTest(LIVE_SERVER_CLASS):
         self.wait_page_loaded()
 
 
+@override_settings(ROOT_URLCONF="autocomplete.urls")
 class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
@@ -254,7 +256,7 @@ class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete_admin(self):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
-        self.selenium.get('%s/admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/admin/autocomplete/bandmember/%d/' % (self.live_server_url, mick.pk))
 
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
@@ -289,7 +291,7 @@ class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete_with_initial_admin(self):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger", band_id=2)
-        self.selenium.get('%s/admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/admin/autocomplete/bandmember/%d/' % (self.live_server_url, mick.pk))
 
         # The autocomplete field is not visible.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
@@ -305,7 +307,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
 
-        self.selenium.get('%s/admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/admin/autocomplete/bandmember/%d/' % (self.live_server_url, mick.pk))
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
@@ -331,7 +333,7 @@ class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_limit_choices_autocomplete_admin(self):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
-        self.selenium.get('%s/limit-choices-admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/limit-choices-admin/autocomplete/bandmember/%d/' % (self.live_server_url, mick.pk))
 
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
@@ -361,7 +363,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.admin_login("super", "secret", login_url='/admin/')
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
 
-        self.selenium.get('%s/limit-choices-admin/test_app/bandmember/%d/' % (self.live_server_url, mick.pk))
+        self.selenium.get('%s/limit-choices-admin/autocomplete/bandmember/%d/' % (self.live_server_url, mick.pk))
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
@@ -387,7 +389,7 @@ class YaaacLiveServerTest(LiveServerTest):
     def test_foreign_key_autocomplete_admin_inlines(self):
         self.admin_login("super", "secret", login_url='/admin/')
         genesis = models.Band.objects.get(name="Genesis")
-        self.selenium.get('%s/admin/test_app/band/%d/' % (self.live_server_url, genesis.pk))
+        self.selenium.get('%s/admin/autocomplete/band/%d/' % (self.live_server_url, genesis.pk))
 
         # Phil Collins and Peter Gabriel have their favorite instrument set and shown.
         fav_search_elem = self.selenium.find_element_by_xpath(

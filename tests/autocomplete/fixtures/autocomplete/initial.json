@@ -1,56 +1,56 @@
 [
 {
   "pk": 1, 
-  "model": "test_app.instrument", 
+  "model": "autocomplete.instrument", 
   "fields": {
     "name": "Vocals"
   }
 },
 {
   "pk": 2, 
-  "model": "test_app.instrument", 
+  "model": "autocomplete.instrument", 
   "fields": {
     "name": "Guitare"
   }
 },
 {
   "pk": 3, 
-  "model": "test_app.instrument", 
+  "model": "autocomplete.instrument", 
   "fields": {
     "name": "Keyboards"
   }
 },
 {
   "pk": 4, 
-  "model": "test_app.instrument", 
+  "model": "autocomplete.instrument", 
   "fields": {
     "name": "Drums"
   }
 },
 {
   "pk": 5, 
-  "model": "test_app.instrument", 
+  "model": "autocomplete.instrument", 
   "fields": {
     "name": "Percussion"
   }
 },
 {
   "pk": 1, 
-  "model": "test_app.musicgenre", 
+  "model": "autocomplete.musicgenre", 
   "fields": {
     "name": "Rock"
   }
 },
 {
   "pk": 2, 
-  "model": "test_app.musicgenre", 
+  "model": "autocomplete.musicgenre", 
   "fields": {
     "name": "Blues/Rock"
   }
 },
 {
   "pk": 3, 
-  "model": "test_app.musicgenre", 
+  "model": "autocomplete.musicgenre", 
   "fields": {
     "name": "Cheese"
   }
@@ -74,7 +74,7 @@
 },
 {
   "pk": 1, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Rock"
@@ -84,7 +84,7 @@
 },
 {
   "pk": 2, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Blues/Rock"
@@ -94,7 +94,7 @@
 },
 {
   "pk": 3, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Rock"
@@ -104,7 +104,7 @@
 },
 {
   "pk": 4, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Blues/Rock"
@@ -114,7 +114,7 @@
 },
 {
   "pk": 5, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Cheese"
@@ -124,7 +124,7 @@
 },
 {
   "pk": 6, 
-  "model": "test_app.band", 
+  "model": "autocomplete.band", 
   "fields": {
     "genre": [
       "Cheese"
@@ -134,7 +134,7 @@
 },
 {
   "pk": 1, 
-  "model": "test_app.bandmember", 
+  "model": "autocomplete.bandmember", 
   "fields": {
     "band": [
       "Genesis"
@@ -148,7 +148,7 @@
 },
 {
   "pk": 2, 
-  "model": "test_app.bandmember", 
+  "model": "autocomplete.bandmember", 
   "fields": {
     "band": [
       "Genesis"
@@ -162,7 +162,7 @@
 },
 {
   "pk": 3, 
-  "model": "test_app.bandmember", 
+  "model": "autocomplete.bandmember", 
   "fields": {
     "band": [
       "Genesis"
@@ -174,7 +174,7 @@
 },
 {
   "pk": 4, 
-  "model": "test_app.bandmember", 
+  "model": "autocomplete.bandmember", 
   "fields": {
     "first_name": "Phil", 
     "last_name": "Spector",

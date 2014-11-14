@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django_yaaac.forms.fields import AutocompleteModelChoiceField
-from test_app import models
+from . import models
 
 
 ## Forms ##
