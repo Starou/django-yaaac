@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+#
+# Inspired from https://github.com/django/django/blob/master/tests/runtests.py.
+#
 from argparse import ArgumentParser
 import os
 import sys
