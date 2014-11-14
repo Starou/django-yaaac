@@ -7,11 +7,8 @@ import os
 import sys
 
 import django
-from django import contrib
 from django.apps import apps
 from django.conf import settings
-from django.db import connection
-from django.test import TestCase
 from django.test.utils import get_runner
 from django.utils._os import upath
 
@@ -48,17 +45,12 @@ def get_test_modules():
     modules = []
     for f in os.listdir(RUNTESTS_DIR):
         if ('.' in f or
-                f.startswith('sql') or
                 os.path.basename(f) in SUBDIRS_TO_SKIP or
                 os.path.isfile(f) or
                 not os.path.exists(os.path.join(f, '__init__.py'))):
             continue
         modules.append(f)
     return modules
-
-
-def get_installed():
-    return [app_config.name for app_config in apps.get_app_configs()]
 
 
 def setup(verbosity, test_labels):
@@ -127,19 +119,18 @@ def django_tests(verbosity, test_labels):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Run the Django test suite.")
-    parser.add_argument('modules', nargs='*', metavar='module',
-        help='Optional path(s) to test modules; e.g. "i18n" or '
-             '"i18n.tests.TranslationTests.test_lazy_objects".')
+    parser.add_argument(
+        'modules', nargs='*', metavar='module',
+        help='Optional path(s) to test modules; e.g. "autocomplete" or '
+        '"utils.tests.UtilsTestCase.test_clean_fieldname_prefix".')
     parser.add_argument(
         '-v', '--verbosity', default=1, type=int, choices=[0, 1, 2, 3],
         help='Verbosity level; 0=minimal output, 1=normal output, 2=all output')
-    parser.add_argument('--liveserver',
+    parser.add_argument(
+        '--liveserver',
         help='Overrides the default address where the live server (used with '
              'LiveServerTestCase) is expected to run from. The default value '
              'is localhost:8081.')
-    parser.add_argument(
-        '--selenium', action='store_true', dest='selenium', default=False,
-        help='Run the Selenium tests as well (if Selenium is installed)')
     options = parser.parse_args()
 
     # Allow including a trailing slash on app_labels for tab completion convenience
@@ -147,9 +138,6 @@ if __name__ == "__main__":
 
     if options.liveserver is not None:
         os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = options.liveserver
-
-    if options.selenium:
-        os.environ['DJANGO_SELENIUM_TESTS'] = '1'
 
     os.environ['DJANGO_SETTINGS_MODULE'] = 'test_sqlite_settings'
     failures = django_tests(options.verbosity, options.modules)
