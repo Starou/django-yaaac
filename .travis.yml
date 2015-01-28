@@ -17,9 +17,11 @@ before_install:
 
 install: 
   - pip install -q Django==$DJANGO_VERSION
-  - pip install selenium
+  - pip install coverage coveralls selenium
   - pip install .
 
 before_script: cd tests
 
-script: make tests
+script: make coverage
+
+after_script: coveralls
