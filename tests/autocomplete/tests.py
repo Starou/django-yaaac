@@ -465,7 +465,7 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertEqual(fav_value_elem.get_attribute("href"), "http://en.wikipedia.org/wiki/Guitare")
 
         # Save the form. Check models.
-        self.selenium.find_element_by_name("_save").click()
+        self.selenium.find_element_by_name("_save").submit()
         genesis = models.Band.objects.get(name="Genesis")
         self.assertEqual(list(genesis.bandmember_set.all().order_by("last_name").values_list(
             "first_name", "last_name", "favorite_instrument__name")), [
