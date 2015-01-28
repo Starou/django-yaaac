@@ -20,4 +20,4 @@ install:
   - pip install selenium
   - pip install .
 
-script: cd tests && make tests
+script: cd tests; make tests
