@@ -10,8 +10,14 @@ env:
   - DJANGO_VERSION=1.6.10
   - DJANGO_VERSION=1.7.4
 
+matrix:
+  exclude:
+    - python: 3.3
+      env: DJANGO_VERSION=1.4.19
+
 install: 
   - pip install -q Django==$DJANGO_VERSION
+  - pip install selenium
   - pip install .
 
 script: cd tests && make tests
