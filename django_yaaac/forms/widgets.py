@@ -71,13 +71,16 @@ class AutocompleteWidget(forms.HiddenInput):
         search_opts = self.opts.copy()
         del search_opts["search_fields"]
 
+        # https://code.djangoproject.com/ticket/24252#ticket
         lookup_url = reverse_lazy('%s:%s_%s_changelist' % info, current_app=self.site.name)
         params = self.url_parameters()
         url_params = '?' + '&'.join('%s=%s' % (k, v) for k, v in params.items())
 
         attrs.update({
             'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
-            'search_url': "%s%s&suggest_by=%s" % (search_url, url_params, self.opts["suggest_by"]),
+            'search_url': u"{search_url}{url_params}&suggest_by={suggest_by}".format(search_url=unicode(search_url),
+                                                                                     url_params=url_params,
+                                                                                     suggest_by=self.opts["suggest_by"]),
             'search_opts': json.dumps(search_opts),
             'search_fields': ",".join(search_fields),
         })
@@ -88,7 +91,8 @@ class AutocompleteWidget(forms.HiddenInput):
                                               "placeholder": "start typing to search",
                                               "style": value and "display:none" or ""}))
         lookup_elem = format_html('<a {0}><img {1} /></a>',
-                                  flatatt({"href": "%s%s" % (lookup_url, url_params),
+                                  flatatt({"href": u"{lookup_url}{url_params}".format(lookup_url=lookup_url,
+                                                                                      url_params=url_params),
                                            "id": "lookup_id_%s" % name,
                                            "class": "yaaac_lookup",
                                           "style": value and "display:none" or ""}),
