@@ -12,7 +12,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 install: 
-  - if [ $DJANGO_VERSION == 1.8 ]; then pip install git+git://github.com:django/django.git@stable/1.8.x; else pip install -q Django==$DJANGO_VERSION; fi
+  - if [ $DJANGO_VERSION == 1.8 ]; then pip install git+https://github.com/django/django.git@stable/1.8.x; else pip install -q Django==$DJANGO_VERSION; fi
   - pip install coverage coveralls selenium
   - pip install .
 
