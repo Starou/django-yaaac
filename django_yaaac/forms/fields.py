@@ -1,14 +1,14 @@
+from django import VERSION as DJ_VERSION
 from django.forms.models import ModelChoiceField
 from django_yaaac.forms.widgets import AutocompleteWidget
-from django import VERSION as DJ_VERSION
-
 from django_yaaac.manager import autocomplete
+
 
 class AutocompleteModelChoiceField(ModelChoiceField):
     widget = AutocompleteWidget
 
     def __init__(self, site, queryset, yaaac_opts, limit_choices_to=None,
-                 empty_label="---------", cache_choices=False, required=True,
+                 empty_label="---------", cache_choices=None, required=True,
                  widget=None, label=None, initial=None, help_text='',
                  to_field_name=None, *args, **kwargs):
         # the `limit_choices_to' parameter allows us to enable the filtering in
@@ -26,6 +26,11 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         queryset_id = autocomplete.register_queryset(app_label=app_label, model_name=model_name, queryset=queryset)
 
         widget = AutocompleteWidget(site, model, limit_choices_to, yaaac_opts, queryset_id=queryset_id)
-        ModelChoiceField.__init__(self, queryset, empty_label, cache_choices,
-                                  required, widget, label, initial, help_text,
-                                  to_field_name, *args, **kwargs)
+        if DJ_VERSION < (1, 9):
+            ModelChoiceField.__init__(self, queryset, empty_label, cache_choices,
+                                      required, widget, label, initial, help_text,
+                                      to_field_name, *args, **kwargs)
+        else:
+            ModelChoiceField.__init__(self, queryset, empty_label,
+                                      required, widget, label, initial, help_text,
+                                      to_field_name, *args, **kwargs)
