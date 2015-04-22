@@ -8,6 +8,7 @@ if DJ_VERSION < (1, 7):
     from django.forms.util import flatatt
 else:
     from django.forms.utils import flatatt
+from django.forms import Media
 from django.utils.html import format_html
 from django.utils.text import Truncator
 from django_yaaac.utils import clean_fieldname_prefix
@@ -21,17 +22,23 @@ if DJ_VERSION < (1, 6):
 class AutocompleteWidget(forms.HiddenInput):
     is_hidden = False
 
-    class Media:
+    @property
+    def media(self):
         css = {
             'all': (
-                static('django_yaaac/css/autocomplete.css'),
+                ('django_yaaac/css/autocomplete.css'),
             )
         }
         js = (
-            static('django_yaaac/js/jquery.autocomplete.min.js'),
-            static('django_yaaac/js/%s' % JS_COMPAT_FILE),
-            static('django_yaaac/js/yaaac_autocomplete.js'),
+            ('django_yaaac/js/jquery.autocomplete.min.js'),
+            ('django_yaaac/js/%s' % JS_COMPAT_FILE),
+            ('django_yaaac/js/yaaac_autocomplete.js'),
         )
+        return Media(js=[static(path) for path in js],
+                     css=dict([
+                         (key, [static(path) for path in paths])
+                         for key, paths in css.items()
+                     ]))
 
     def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None, queryset_id=None):
         self.queryset_id = queryset_id
