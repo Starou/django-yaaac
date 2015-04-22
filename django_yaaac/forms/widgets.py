@@ -26,19 +26,21 @@ class AutocompleteWidget(forms.HiddenInput):
     def media(self):
         css = {
             'all': (
-                ('django_yaaac/css/autocomplete.css'),
+                'django_yaaac/css/autocomplete.css',
             )
         }
         js = (
-            ('django_yaaac/js/jquery.autocomplete.min.js'),
-            ('django_yaaac/js/%s' % JS_COMPAT_FILE),
-            ('django_yaaac/js/yaaac_autocomplete.js'),
+            'django_yaaac/js/jquery.autocomplete.min.js',
+            'django_yaaac/js/%s' % JS_COMPAT_FILE,
+            'django_yaaac/js/yaaac_autocomplete.js',
         )
-        return Media(js=[static(path) for path in js],
-                     css=dict([
-                         (key, [static(path) for path in paths])
-                         for key, paths in css.items()
-                     ]))
+        base_media = super(AutocompleteWidget, self).media
+        media = Media(js=[static(path) for path in js],
+                      css=dict([
+                          (key, [static(path) for path in paths])
+                          for key, paths in css.items()
+                      ]))
+        return base_media + media
 
     def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None, queryset_id=None):
         self.queryset_id = queryset_id
