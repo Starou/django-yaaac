@@ -6,14 +6,14 @@ Another Ajax Auto-Complete, Yet
 .. image:: https://coveralls.io/repos/Starou/django-yaaac/badge.png
   :target: https://coveralls.io/r/Starou/django-yaaac
 
-.. image:: https://pypip.in/v/django-yaaac/badge.png
+.. image:: https://img.shields.io/pypi/v/django_yaaac.svg
   :target: https://pypi.python.org/pypi/django-yaaac
 
-.. image:: https://pypip.in/py_versions/django-yaaac/badge.svg
+.. image:: https://img.shields.io/pypi/pyversions/django_yaaac.svg
     :target: https://pypi.python.org/pypi/django-yaaac/
     :alt: Supported Python versions
 
-.. image:: https://pypip.in/license/django-yaaac/badge.svg
+.. image:: https://img.shields.io/pypi/l/django_yaaac.svg
     :target: https://pypi.python.org/pypi/django-yaaac/
     :alt: License
 
