@@ -2,7 +2,6 @@
 Another Ajax Auto-Complete, Yet
 ===============================
 
-
 .. image:: https://coveralls.io/repos/Starou/django-yaaac/badge.png
   :target: https://coveralls.io/r/Starou/django-yaaac
 
@@ -24,7 +23,6 @@ Another Ajax Auto-Complete, Yet
 
 *Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition
 to the *raw_id_fields* related lookup and - *cerise sur le gateau* - it is usable outside the admin.
-
 
 Examples
 ========
@@ -64,7 +62,9 @@ Or with *pip*::
 
     pip install django-yaaac
 
-Add the app in your settings.INSTALLED_APPS::
+Add the app in your settings.INSTALLED_APPS:
+
+.. code-block:: python
 
     INSTALLED_APPS = [
         ...,
@@ -72,7 +72,9 @@ Add the app in your settings.INSTALLED_APPS::
         ...,
     ]
 
-In the *urls.py* module of your project, define the url pattern for ajax calls::
+In the *urls.py* module of your project, define the url pattern for ajax calls:
+
+.. code-block:: python
 
     import django_yaaac as yaaac
     from django.conf.urls import patterns, include, url
@@ -82,15 +84,15 @@ In the *urls.py* module of your project, define the url pattern for ajax calls::
         ...
     )
 
-
 Usage
 =====
 
 Forms
 -----
 
-What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*::
+What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*:
 
+.. code-block:: python
 
     from django import forms
     from django.contrib import admin
@@ -125,7 +127,6 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
     admin.site.register(models.BandMember, BandMemberAdmin)
 
-
 The *site* parameter of *AutocompleteModelChoiceField* is required for related lookup (the
 magnifier glass). The *search_fields* is a list of fields to search against using the same syntax
 as in Django Admin (^, $ etc).
@@ -140,17 +141,17 @@ Outside the admin, you have to explicitly call the yaaac static files like that:
       {{ form.media }}
     </head>
 
-
 *suggest_by* is optional. It can be a field or a method of the model.
 By default, suggestions are shown using *__unicode__* method.
 
 If your model define a ``get_absolute_url()`` method, the label is a link to that resource.
 
-
 Models
 ------
 
-For security reasons you must open the search view on the models like this::
+For security reasons you must open the search view on the models like this:
+
+.. code-block:: python
 
     class BandMember(models.Model):
         plain_stupid_password = models.CharField(max_length=4)
@@ -175,14 +176,11 @@ For security reasons you must open the search view on the models like this::
 
 The `Yaaac` class must defines the following:
 
-
 - ``user_passes_test`` is a class method that takes a user and return True or False.
 - ``allows_suggest_by`` is a list of model fields or methods that can used as return value by the search view.
 
-
 Tuning
 ======
-
 
 To ease the DOM manipulation, HTML classes are added to the elements. The most interesting being ``yaaac_<fieldname>``
 to the hidden input storing the foreign key value. This is very convenient when you need to add behavior to a whole
