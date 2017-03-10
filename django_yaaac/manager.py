@@ -46,13 +46,12 @@ class AutocompleteManager(object):
         self.registered_querysets = {}
 
     def get_urls(self):
-        from django.conf.urls import patterns, url
-        urlpatterns = patterns(
-            '',
+        from django.conf.urls import url
+        urlpatterns = [
             url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
                 self.search, name='search_with_queryset_id'),
             url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
-        )
+        ]
         return urlpatterns
 
     @property
