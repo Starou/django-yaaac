@@ -97,7 +97,7 @@ class AutocompleteManager(object):
         if suggest_by in model._meta.get_all_field_names():
             result = result.values_list('id', suggest_by)
         else:
-            result = [(obj.pk, getattr(obj, suggest_by)()) for obj in result]
+            result = [(o.pk, getattr(o, suggest_by)()) for o in result]
         result = result or [('', '')]
         suggestions = [{"value": r[1], "data": r[0]} for r in result]
         return json_response({'query': request.GET.get('query'),
