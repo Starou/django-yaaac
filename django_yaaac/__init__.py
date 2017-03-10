@@ -1,5 +1,1 @@
-# The try/catch statement allows us to import django_yaaac outside any Django project.
-try:
-    from django_yaaac.manager import autocomplete
-except:
-    pass
+default_app_config = 'django_yaaac.apps.YaaacConfig'

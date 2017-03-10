@@ -5,7 +5,8 @@ from django.test import TestCase, LiveServerTestCase
 from django.test import override_settings
 from django.test.client import Client
 from . import models
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
 
 from django import VERSION
 LIVE_SERVER_CLASS = LiveServerTestCase
@@ -92,26 +93,21 @@ class LiveServerTest(LIVE_SERVER_CLASS):
         while self.selenium.execute_script("return jQuery.active != 0"):
             time.sleep(0.1)
 
+    # this bits from Django
+    # https://github.com/django/django/blob/master/django/contrib/admin/tests.py#L36
     def wait_until(self, callback, timeout=10):
         from selenium.webdriver.support.wait import WebDriverWait
         WebDriverWait(self.selenium, timeout).until(callback)
 
-    def wait_loaded_tag(self, tag_name, timeout=10):
-        self.wait_until(
-            lambda driver: driver.find_element_by_tag_name(tag_name),
-            timeout
-        )
+    def wait_for_popup(self, num_windows=2, timeout=10):
+        self.wait_until(lambda d: len(d.window_handles) == num_windows, timeout)
 
-    def wait_page_loaded(self):
-        from selenium.common.exceptions import TimeoutException
-        try:
-            # Wait for the next page to be loaded
-            self.wait_loaded_tag('body')
-        except TimeoutException:
-            # IE7 occasionnally returns an error "Internet Explorer cannot
-            # display the webpage" and doesn't load the next page. We just
-            # ignore it.
-            pass
+    def wait_page_loaded(self, by=By.TAG_NAME, search="body"):
+        from selenium.webdriver.support.wait import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        WebDriverWait(self.selenium, 5).until(
+            EC.presence_of_element_located((by, search))
+        )
 
     def admin_login(self, username, password, login_url='/admin/'):
         self.selenium.get('%s%s' % (self.live_server_url, login_url))
@@ -122,7 +118,7 @@ class LiveServerTest(LIVE_SERVER_CLASS):
         login_text = 'Log in'
         self.selenium.find_element_by_xpath(
             '//input[@value="%s"]' % login_text).click()
-        self.wait_page_loaded()
+        self.wait_page_loaded(By.CLASS_NAME, "dashboard")
 
 
 @override_settings(ROOT_URLCONF="autocomplete.urls")
@@ -177,12 +173,9 @@ class YaaacLiveServerTest(LiveServerTest):
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
-        self.selenium.switch_to_window('id_band')
-        self.wait_page_loaded()
-
-        band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
-        self.assertEqual(band_link.text, "SuperHeavy")
-        band_link.click()
+        self.wait_for_popup()
+        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.find_element_by_link_text("SuperHeavy").click()
         self.selenium.switch_to_window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
@@ -232,12 +225,9 @@ class YaaacLiveServerTest(LiveServerTest):
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
-        self.selenium.switch_to_window('id_band')
-        self.wait_page_loaded()
-
-        band_link = self.selenium.find_element_by_xpath("//tr[1]//a")
-        self.assertEqual(band_link.text, "SuperHeavy")
-        band_link.click()
+        self.wait_for_popup()
+        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.find_element_by_link_text("SuperHeavy").click()
         self.selenium.switch_to_window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
@@ -311,12 +301,9 @@ class YaaacLiveServerTest(LiveServerTest):
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
-        self.selenium.switch_to_window('id_band')
-        self.wait_page_loaded()
-
-        band_link = self.selenium.find_element_by_xpath("//tr[3]//a")
-        self.assertEqual(band_link.text, "SuperHeavy")
-        band_link.click()
+        self.wait_for_popup()
+        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.find_element_by_link_text("SuperHeavy").click()
         self.selenium.switch_to_window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
@@ -367,12 +354,9 @@ class YaaacLiveServerTest(LiveServerTest):
         main_window = self.selenium.current_window_handle
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
-        self.selenium.switch_to_window('id_band')
-        self.wait_page_loaded()
-
-        band_link = self.selenium.find_element_by_xpath("//tr[1]//a")
-        self.assertEqual(band_link.text, "SuperHeavy")
-        band_link.click()
+        self.wait_for_popup()
+        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.find_element_by_link_text("SuperHeavy").click()
         self.selenium.switch_to_window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
