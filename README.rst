@@ -77,12 +77,13 @@ In the *urls.py* module of your project, define the url pattern for ajax calls:
 .. code-block:: python
 
     from django_yaaac.manager import autocomplete
-    from django.conf.urls import patterns, include, url
+    from django.conf.urls import url
 
-    urlpatterns = patterns('',
-        url(r'^yaaac/', include(autocomplete.urls)),
+    urlpatterns = [
         ...
-    )
+        url(r'^yaaac/', autocomplete.urls),
+        ...
+    ]
 
 Usage
 =====
