@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: python
 
 python:
@@ -6,19 +8,21 @@ python:
 env:
   - DJANGO_VERSION=1.7.4
   - DJANGO_VERSION=1.8.1
-
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - DJANGO_VERSION=1.9.12
 
 install: 
-  - if [ $DJANGO_VERSION == 1.9 ]; then pip install git+https://github.com/django/django.git@stable/1.9.x; else pip install -q Django==$DJANGO_VERSION; fi
+  - pip install -q Django==$DJANGO_VERSION
   - pip install -q coverage
   - pip install -q coveralls
   - pip install -q selenium
   - pip install .
 
-before_script: cd tests
+before_script:
+  - sudo apt-get install -qq chromium-chromedriver
+  - export PATH=$PATH:/usr/lib/chromium-browser/
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - cd tests
 
 script: make coverage
 
