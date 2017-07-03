@@ -6,7 +6,6 @@ python:
   - 2.7
 
 env:
-  - DJANGO_VERSION=1.7.4
   - DJANGO_VERSION=1.8.1
   - DJANGO_VERSION=1.9.12
   - DJANGO_VERSION=1.10.7
