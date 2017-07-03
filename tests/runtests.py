@@ -57,7 +57,7 @@ def setup(verbosity, test_labels):
     state = {
         'INSTALLED_APPS': settings.INSTALLED_APPS,
         'ROOT_URLCONF': getattr(settings, "ROOT_URLCONF", ""),
-        'TEMPLATE_DIRS': settings.TEMPLATE_DIRS,
+        'TEMPLATES': settings.TEMPLATES,
         'LANGUAGE_CODE': settings.LANGUAGE_CODE,
         'STATIC_URL': settings.STATIC_URL,
         'STATIC_ROOT': settings.STATIC_ROOT,
@@ -69,7 +69,22 @@ def setup(verbosity, test_labels):
     settings.ROOT_URLCONF = 'urls'
     settings.STATIC_URL = '/static/'
     settings.STATIC_ROOT = ''
-    settings.TEMPLATE_DIRS = (os.path.join(RUNTESTS_DIR, TEST_TEMPLATE_DIR),)
+    settings.TEMPLATES = [{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(RUNTESTS_DIR, TEST_TEMPLATE_DIR)],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+            ],
+        },
+
+    }]
     settings.LANGUAGE_CODE = 'en'
     settings.SITE_ID = 1
     settings.MIDDLEWARE_CLASSES = ALWAYS_MIDDLEWARE_CLASSES

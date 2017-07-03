@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django_yaaac.forms.fields import AutocompleteModelChoiceField
 from . import models
 
@@ -60,10 +59,10 @@ def band_member_form(request, member_id=None):
     if request.method == 'POST':
         band_member = form.save()
         return HttpResponseRedirect("/band-member-form/%s/" % band_member.pk)
-    return render_to_response('base_form.html', {
+    return render(request, 'base_form.html', {
         'form': form,
         'title': "Add a band member"
-    }, context_instance=RequestContext(request))
+    })
 
 
 def band_member_limit_form(request, member_id=None):
@@ -74,7 +73,7 @@ def band_member_limit_form(request, member_id=None):
     if request.method == 'POST':
         band_member = form.save()
         return HttpResponseRedirect("/band-member-form/limit-choices/%s/" % band_member.pk)
-    return render_to_response('base_form.html', {
+    return render(request, 'base_form.html', {
         'form': form,
         'title': "Add a band member"
-    }, context_instance=RequestContext(request))
+    })
