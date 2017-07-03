@@ -94,11 +94,16 @@ class AutocompleteWidget(forms.HiddenInput):
             'search_fields': ",".join(search_fields),
         })
         hidden_input = super(AutocompleteWidget, self).render(name, value, attrs)
-        autocomp_input = format_html('<input{0} />',
-                                     flatatt({"type": "text",
-                                              "class": "yaaac_search_input",
-                                              "placeholder": "start typing to search",
-                                              "style": value and "display:none" or ""}))
+        autocomp_input_attrs = {
+            "type": "text",
+            "class": "yaaac_search_input",
+            "placeholder": "start typing to search",
+            "style": value and "display:none" or ""
+        }
+        # flatatt in Django < 1.11 does not handle None values.
+        if "required" in attrs:
+            autocomp_input_attrs["required"] = ""
+        autocomp_input = format_html('<input{0} />', flatatt(autocomp_input_attrs))
         lookup_elem = format_html('<a {0}><img {1} /></a>',
                                   flatatt({"href": u"{lookup_url}{url_params}".format(lookup_url=lookup_url,
                                                                                       url_params=url_params),

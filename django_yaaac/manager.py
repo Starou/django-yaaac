@@ -47,12 +47,11 @@ class AutocompleteManager(object):
 
     def get_urls(self):
         from django.conf.urls import url
-        urlpatterns = [
+        return [
             url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
                 self.search, name='search_with_queryset_id'),
             url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         ]
-        return urlpatterns
 
     @property
     def urls(self):
@@ -94,7 +93,7 @@ class AutocompleteManager(object):
             result = model.objects.filter(**kwargs)
         result = self.get_search_results(result, search_fields, query)
 
-        if suggest_by in model._meta.get_all_field_names():
+        if suggest_by in [f.name for f in model._meta.get_fields()]:
             result = result.values_list('id', suggest_by)
         else:
             result = [(o.pk, getattr(o, suggest_by)()) for o in result]
