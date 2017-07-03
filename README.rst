@@ -62,6 +62,8 @@ Or with *pip*::
 
     pip install django-yaaac
 
+(for Django < 1.8, use a previous version like ``pip install django-yaaac==1.9.0``)
+
 Add the app in your settings.INSTALLED_APPS:
 
 .. code-block:: python
@@ -104,7 +106,7 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
 
     class BandMemberForm(forms.ModelForm):
-        band = AutocompleteModelChoiceField(site=admin.site, 
+        band = AutocompleteModelChoiceField(site=admin.site,
                                             queryset=models.Band.objects.all(),
                                             yaaac_opts={
                                                 "search_fields": ["^name"],
@@ -120,7 +122,7 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
 
     class BandMemberAdmin(admin.ModelAdmin):
         form = BandMemberForm
-    
+
         class Media:
             # You need jQuery.
             js = (static('js/jquery.min.js'), )
@@ -175,7 +177,7 @@ For security reasons you must open the search view on the models like this:
             return u"%s %s" % (self.first_name, self.last_name)
 
 
-The `Yaaac` class must defines the following:
+The ``Yaaac`` class must defines the following:
 
 - ``user_passes_test`` is a class method that takes a user and return True or False.
 - ``allows_suggest_by`` is a list of model fields or methods that can used as return value by the search view.
