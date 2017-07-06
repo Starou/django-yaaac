@@ -101,7 +101,7 @@ class AutocompleteWidget(forms.HiddenInput):
             "style": value and "display:none" or ""
         }
         # flatatt in Django < 1.11 does not handle None values.
-        if "required" in attrs:
+        if not value and "required" in attrs:
             autocomp_input_attrs["required"] = ""
         autocomp_input = format_html('<input{0} />', flatatt(autocomp_input_attrs))
         lookup_elem = format_html('<a {0}><img {1} /></a>',

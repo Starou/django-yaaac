@@ -25,9 +25,16 @@ var yaaac_set_label = function() {
 
 var yaaac_clear_value = function() {
     /* Clear the FK field and switch to autocomplete search mode. */
-    $(this).parents(".yaaac_container").find(".yaaac_pk").val("").change();
+    var id_input = $(this).parents(".yaaac_container").find(".yaaac_pk");
+    var search_field = $(this).parents(".yaaac_container").find(".yaaac_search_input");
+
+    id_input.val("").change();
     $(this).parent().hide();
-    $(this).parents(".yaaac_container").find(".yaaac_search_input").val("").show();
+
+    if (typeof(id_input.attr('required')) != 'undefined') {
+        search_field.attr('required', true);
+    }
+    search_field.val("").show();
     $(this).parents(".yaaac_container").find(".yaaac_lookup").show();
 };
 
@@ -48,6 +55,7 @@ var yaaac_set_autocomplete = function() {
         serviceUrl: $id_input.attr("search_url"),
         onSelect: function(suggestion) {
             $id_input.val(suggestion.data).change();
+            $(this).removeAttr('required');
         },
         params: {
             search_fields: $id_input.attr("search_fields")
