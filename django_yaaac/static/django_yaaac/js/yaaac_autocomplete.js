@@ -23,18 +23,21 @@ var yaaac_set_label = function() {
 };
 
 
+var yaaac_switch_search_input_required_attr = function() {
+    var search_input = $(this).parents(".yaaac_container").find(".yaaac_search_input");
+    if ($(this).val() == "") {
+        search_input.attr('required', true);
+    } else {
+        search_input.removeAttr('required');
+    }
+};
+
+
 var yaaac_clear_value = function() {
     /* Clear the FK field and switch to autocomplete search mode. */
-    var id_input = $(this).parents(".yaaac_container").find(".yaaac_pk");
-    var search_field = $(this).parents(".yaaac_container").find(".yaaac_search_input");
-
-    id_input.val("").change();
+    $(this).parents(".yaaac_container").find(".yaaac_pk").val("").change();
     $(this).parent().hide();
-
-    if (typeof(id_input.attr('required')) != 'undefined') {
-        search_field.attr('required', true);
-    }
-    search_field.val("").show();
+    $(this).parents(".yaaac_container").find(".yaaac_search_input").val("").show();
     $(this).parents(".yaaac_container").find(".yaaac_lookup").show();
 };
 
@@ -55,7 +58,6 @@ var yaaac_set_autocomplete = function() {
         serviceUrl: $id_input.attr("search_url"),
         onSelect: function(suggestion) {
             $id_input.val(suggestion.data).change();
-            $(this).removeAttr('required');
         },
         params: {
             search_fields: $id_input.attr("search_fields")
@@ -113,6 +115,7 @@ var dismissRelatedLookupPopup = function(win, chosenId) {
 
 $(document).ready(function() {
     $("body").on("change", ".yaaac_pk", yaaac_set_label);
+    $("body").on("change", ".yaaac_pk[required]", yaaac_switch_search_input_required_attr);
     $("body").on("click", ".yaaac_clear_value", yaaac_clear_value);
     $("body").on("click", ".yaaac_lookup", yaaac_open_lookup);
     $("body").on("focus", ".yaaac_search_input", yaaac_set_autocomplete);
