@@ -61,7 +61,7 @@ class AutocompleteWidget(forms.HiddenInput):
         self.limit_choices_to = limit_choices_to or {}
         super(AutocompleteWidget, self).__init__(attrs)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         app_label = self.model._meta.app_label
         if DJ_VERSION < (1, 6):
             model_name = self.model._meta.module_name
