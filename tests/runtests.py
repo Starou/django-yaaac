@@ -12,6 +12,7 @@ from django.conf import settings
 from django.test.utils import get_runner
 from django.utils._os import upath
 
+from django import VERSION as DJ_VERSION
 
 TEST_TEMPLATE_DIR = 'templates'
 
@@ -40,6 +41,9 @@ ALWAYS_MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+MIDDLEWARE_ATTR = "MIDDLEWARE"
+if DJ_VERSION < (1, 10):
+    MIDDLEWARE_ATTR = "MIDDLEWARE_CLASSES"
 
 def get_test_modules():
     modules = []
@@ -61,7 +65,7 @@ def setup(verbosity, test_labels):
         'LANGUAGE_CODE': settings.LANGUAGE_CODE,
         'STATIC_URL': settings.STATIC_URL,
         'STATIC_ROOT': settings.STATIC_ROOT,
-        'MIDDLEWARE_CLASSES': settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE_ATTR: getattr(settings, MIDDLEWARE_ATTR),
     }
 
     # Redirect some settings for the duration of these tests.
@@ -87,9 +91,9 @@ def setup(verbosity, test_labels):
     }]
     settings.LANGUAGE_CODE = 'en'
     settings.SITE_ID = 1
-    settings.MIDDLEWARE_CLASSES = ALWAYS_MIDDLEWARE_CLASSES
+    setattr(settings, MIDDLEWARE_ATTR, ALWAYS_MIDDLEWARE_CLASSES)
     # Ensure the middleware classes are seen as overridden otherwise we get a compatibility warning.
-    settings._explicit_settings.add('MIDDLEWARE_CLASSES')
+    settings._explicit_settings.add(MIDDLEWARE_ATTR)
     settings.MIGRATION_MODULES = {
         'auth': None,
         'contenttypes': None,
