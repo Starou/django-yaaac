@@ -54,6 +54,8 @@ In inlines as well.
 Installation
 ============
 
+**The current version (1.11.x) supports Django 1.9+.**
+
 Install the app from the source::
 
     python setup.py build && (sudo) python setup.py install
