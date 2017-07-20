@@ -1,3 +1,4 @@
+from django import VERSION as DJ_VERSION
 from django.db import models
 
 
@@ -22,7 +23,10 @@ class BandMemberManager(models.Manager):
 
 
 def can_search_instrument(instance, user):
-    return user and user.is_authenticated() or False
+    if DJ_VERSION < (1, 10):
+        return user and user.is_authenticated() or False
+    else:
+        return user and user.is_authenticated or False
 
 class Instrument(models.Model):
     objects = InstrumentManager()
