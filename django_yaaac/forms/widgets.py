@@ -3,7 +3,10 @@ import json
 from django import VERSION as DJ_VERSION
 from django import forms
 from django.contrib.admin.templatetags.admin_static import static
-from django.core.urlresolvers import reverse_lazy
+if DJ_VERSION < (1, 10):
+    from django.core.urlresolvers import reverse_lazy
+else:
+    from django.urls import reverse_lazy
 if DJ_VERSION < (1, 7):
     from django.forms.util import flatatt
 else:
