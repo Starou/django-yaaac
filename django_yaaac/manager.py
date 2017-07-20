@@ -5,7 +5,6 @@ from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
-from django import VERSION as DJ_VERSION
 
 
 def cache_model(f):
@@ -83,10 +82,7 @@ class AutocompleteManager(object):
             del filter_params["suggest_by"]
         kwargs = lookup_dict_from_url_params(filter_params)
         if queryset_id is not None:
-            if DJ_VERSION < (1, 6):
-                model_name = model._meta.module_name
-            else:
-                model_name = model._meta.model_name
+            model_name = model._meta.model_name
             uuid = '%s-%s-%s' % (app, model_name, queryset_id)
             result = self.registered_querysets[uuid].filter(**kwargs)
         else:
