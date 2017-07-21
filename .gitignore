@@ -7,5 +7,7 @@ dist
 build
 tests/django_test_project/extra_data.json
 tests/coveralls.yaml
+tests/database.db
+tests/geckodriver.log
 tests/.coverage
 .ropeproject

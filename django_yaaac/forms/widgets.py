@@ -3,11 +3,11 @@ import json
 from django import VERSION as DJ_VERSION
 from django import forms
 from django.contrib.admin.templatetags.admin_static import static
-from django.core.urlresolvers import reverse_lazy
-if DJ_VERSION < (1, 7):
-    from django.forms.util import flatatt
+if DJ_VERSION < (1, 10):
+    from django.core.urlresolvers import reverse_lazy
 else:
-    from django.forms.utils import flatatt
+    from django.urls import reverse_lazy
+from django.forms.utils import flatatt
 from django.forms import Media
 from django.utils.html import format_html
 from django.utils.text import Truncator
@@ -15,8 +15,6 @@ from django_yaaac.utils import clean_fieldname_prefix
 
 
 JS_COMPAT_FILE = "yaaac_compat.js"
-if DJ_VERSION < (1, 6):
-    JS_COMPAT_FILE = "yaaac_compat_legacy.js"
 
 
 class AutocompleteWidget(forms.HiddenInput):
@@ -58,12 +56,9 @@ class AutocompleteWidget(forms.HiddenInput):
         self.limit_choices_to = limit_choices_to or {}
         super(AutocompleteWidget, self).__init__(attrs)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         app_label = self.model._meta.app_label
-        if DJ_VERSION < (1, 6):
-            model_name = self.model._meta.module_name
-        else:
-            model_name = self.model._meta.model_name
+        model_name = self.model._meta.model_name
         info = (self.site.name, app_label, model_name)
         if self.queryset_id is not None:
             search_url = reverse_lazy("yaaac:search_with_queryset_id",

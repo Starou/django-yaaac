@@ -174,9 +174,9 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
         self.wait_for_popup()
-        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.switch_to.window(self.selenium.window_handles[1])
         self.selenium.find_element_by_link_text("SuperHeavy").click()
-        self.selenium.switch_to_window(main_window)
+        self.selenium.switch_to.window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.
@@ -226,9 +226,9 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
         self.wait_for_popup()
-        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.switch_to.window(self.selenium.window_handles[1])
         self.selenium.find_element_by_link_text("SuperHeavy").click()
-        self.selenium.switch_to_window(main_window)
+        self.selenium.switch_to.window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.
@@ -302,9 +302,9 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
         self.wait_for_popup()
-        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.switch_to.window(self.selenium.window_handles[1])
         self.selenium.find_element_by_link_text("SuperHeavy").click()
-        self.selenium.switch_to_window(main_window)
+        self.selenium.switch_to.window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.
@@ -355,9 +355,9 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.find_element_by_class_name('yaaac_lookup').click()
 
         self.wait_for_popup()
-        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.switch_to.window(self.selenium.window_handles[1])
         self.selenium.find_element_by_link_text("SuperHeavy").click()
-        self.selenium.switch_to_window(main_window)
+        self.selenium.switch_to.window(main_window)
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.

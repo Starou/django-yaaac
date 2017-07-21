@@ -1,3 +1,4 @@
+from django import VERSION as DJ_VERSION
 from django.db import models
 
 
@@ -22,7 +23,10 @@ class BandMemberManager(models.Manager):
 
 
 def can_search_instrument(instance, user):
-    return user and user.is_authenticated() or False
+    if DJ_VERSION < (1, 10):
+        return user and user.is_authenticated() or False
+    else:
+        return user and user.is_authenticated or False
 
 class Instrument(models.Model):
     objects = InstrumentManager()
@@ -56,7 +60,7 @@ class MusicGenre(models.Model):
 class Band(models.Model):
     objects = BandManager()
     name = models.CharField(max_length=100, unique=True)
-    genre = models.ForeignKey("MusicGenre", null=True, blank=True)
+    genre = models.ForeignKey("MusicGenre", models.SET_NULL, null=True, blank=True)
 
     class Yaaac:
         user_passes_test = lambda instance, u: True
@@ -76,9 +80,11 @@ class BandMember(models.Model):
     objects = BandMemberManager()
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    band = models.ForeignKey("Band", limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
+    band = models.ForeignKey("Band", models.SET_NULL,
+                             limit_choices_to={"genre__name__in": ["Rock", "Blues/Rock"]},
                              null=True, blank=True)
-    favorite_instrument = models.ForeignKey("Instrument", null=True, blank=True)
+    favorite_instrument = models.ForeignKey("Instrument", models.SET_NULL,
+                                            null=True, blank=True)
 
     class Meta:
         unique_together = (('first_name', 'last_name'),)
