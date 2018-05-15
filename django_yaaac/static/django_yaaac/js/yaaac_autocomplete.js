@@ -46,7 +46,7 @@ var yaaac_set_autocomplete = function() {
     /* Add autocomplete if not already.
      * Attached to 'focus' event to handle inlines not present when page is loaded.
      * */
-    if ($(this).autocomplete()) {
+    if ($(this).devbridgeAutocomplete()) {
         return;
     }
     var $id_input = $(this).prev();
@@ -63,8 +63,8 @@ var yaaac_set_autocomplete = function() {
             search_fields: $id_input.attr("search_fields")
         }
     };
-    $input = $(this).autocomplete(options);
-    $input.autocomplete().enable();
+    $input = $(this).devbridgeAutocomplete(options);
+    $input.devbridgeAutocomplete().enable();
 };
 
 
