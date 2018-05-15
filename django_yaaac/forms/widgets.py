@@ -40,20 +40,12 @@ class AutocompleteWidget(forms.HiddenInput):
                       ]))
         return base_media + media
 
-    def __init__(self, site, model, limit_choices_to=None, opts=None, attrs=None, queryset_id=None):
-        self.queryset_id = queryset_id
-        self.site = site
-        self.model = model
-        self.opts = {
-            "min_chars": 1,
-            "max_height": 300,
-            "width": 300,
-            "suggest_by": "__unicode__",
-        }
-        # opts should not by None.
-        self.opts.update(opts)
-
-        self.limit_choices_to = limit_choices_to or {}
+    def __init__(self, attrs=None):
+        self.queryset_id = None
+        self.site = None
+        self.model = None
+        self.opts = None
+        self.limit_choices_to = None
         super(AutocompleteWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None, renderer=None):
