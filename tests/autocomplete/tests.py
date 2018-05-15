@@ -241,6 +241,13 @@ class YaaacLiveServerTest(LiveServerTest):
         band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
         self.assertEqual(band_value_elem.text, "SuperHeavy")
 
+    def test_extra_css(self):
+        self.admin_login("super", "secret", login_url='/admin/')
+        self.selenium.get('%s/band-member-form/extra-css/' % self.live_server_url)
+        container = self.selenium.find_element_by_class_name('yaaac_container')
+        self.assertEqual(container.get_attribute('class'), u'yaaac_container my_extra_class')
+
+
     ## Same tests in admins ##
 
     def test_foreign_key_autocomplete_admin(self):

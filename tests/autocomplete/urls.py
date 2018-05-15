@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^band-member-form/(?P<member_id>\d+)/$', views.band_member_form),
     url(r'^band-member-form/limit-choices/$', views.band_member_limit_form),
     url(r'^band-member-form/limit-choices/(?P<member_id>\d+)/$', views.band_member_limit_form),
+    url(r'^band-member-form/extra-css/$', views.band_member_extra_css),
 ]

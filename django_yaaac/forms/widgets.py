@@ -100,7 +100,8 @@ class AutocompleteWidget(forms.HiddenInput):
                                   flatatt({"width": "16", "height": "16", "alt": "Lookup",
                                            "src": static('django_yaaac/img/selector-search.gif')}))
 
-        return format_html(u'<span class="yaaac_container">{0}{1}{2}{3}</span>',
+        return format_html(u'<span class="yaaac_container{}">{}{}{}{}</span>',
+                           ' {}'.format(self.attrs['class']) if 'class' in self.attrs else '',
                            hidden_input, autocomp_input, lookup_elem, self.value_elem(value))
 
     def value_elem(self, value):
