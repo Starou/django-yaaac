@@ -21,7 +21,20 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         model_name = model._meta.model_name
         queryset_id = autocomplete.register_queryset(app_label=app_label, model_name=model_name, queryset=queryset)
 
-        widget = AutocompleteWidget(site, model, limit_choices_to, yaaac_opts, queryset_id=queryset_id)
+        if not widget:
+            widget = AutocompleteWidget()
+        widget.queryset_id = queryset_id
+        widget.site = site
+        widget.model = model
+        widget.opts = {
+            "min_chars": 1,
+            "max_height": 300,
+            "width": 300,
+            "suggest_by": "__unicode__",
+        }
+        widget.opts.update(yaaac_opts or {})
+        widget.limit_choices_to = limit_choices_to or {}
+
         ModelChoiceField.__init__(self, queryset, empty_label,
                                   required, widget, label, initial, help_text,
                                   to_field_name, *args, **kwargs)
