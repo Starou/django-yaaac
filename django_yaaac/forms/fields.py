@@ -31,6 +31,7 @@ class AutocompleteModelChoiceField(ModelChoiceField):
             "max_height": 300,
             "width": 300,
             "suggest_by": "__unicode__",
+            "allow_lookup": True,
         }
         widget.opts.update(yaaac_opts or {})
         widget.limit_choices_to = limit_choices_to or {}

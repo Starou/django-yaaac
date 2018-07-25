@@ -91,14 +91,16 @@ class AutocompleteWidget(forms.HiddenInput):
         if not value and "required" in attrs:
             autocomp_input_attrs["required"] = ""
         autocomp_input = format_html('<input{0} />', flatatt(autocomp_input_attrs))
-        lookup_elem = format_html('<a {0}><img {1} /></a>',
-                                  flatatt({"href": u"{lookup_url}{url_params}".format(lookup_url=lookup_url,
-                                                                                      url_params=url_params),
-                                           "id": "lookup_id_%s" % name,
-                                           "class": "yaaac_lookup",
-                                          "style": value and "display:none" or ""}),
-                                  flatatt({"width": "16", "height": "16", "alt": "Lookup",
-                                           "src": static('django_yaaac/img/selector-search.gif')}))
+        lookup_elem = ''
+        if self.opts['allow_lookup'] is True:
+            lookup_elem = format_html('<a {0}><img {1} /></a>',
+                                      flatatt({"href": u"{lookup_url}{url_params}".format(lookup_url=lookup_url,
+                                                                                          url_params=url_params),
+                                               "id": "lookup_id_%s" % name,
+                                               "class": "yaaac_lookup",
+                                              "style": value and "display:none" or ""}),
+                                      flatatt({"width": "16", "height": "16", "alt": "Lookup",
+                                               "src": static('django_yaaac/img/selector-search.gif')}))
 
         return format_html(u'<span class="yaaac_container{}">{}{}{}{}</span>',
                            ' {}'.format(self.attrs['class']) if 'class' in self.attrs else '',
