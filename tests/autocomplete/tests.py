@@ -247,6 +247,11 @@ class YaaacLiveServerTest(LiveServerTest):
         container = self.selenium.find_element_by_class_name('yaaac_container')
         self.assertEqual(container.get_attribute('class'), u'yaaac_container my_extra_class')
 
+    def test_no_lookup(self):
+        from selenium.common.exceptions import NoSuchElementException
+        self.admin_login("super", "secret", login_url='/admin/')
+        self.selenium.get('%s/band-member-form/no-lookup/' % self.live_server_url)
+        self.assertRaises(NoSuchElementException, self.selenium.find_element_by_class_name, 'yaaac_lookup')
 
     ## Same tests in admins ##
 

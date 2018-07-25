@@ -64,6 +64,21 @@ class BandMemberExtraCSSForm(forms.ModelForm):
         exclude = ()
 
 
+class BandMemberExtraNoLookupForm(forms.ModelForm):
+    band = AutocompleteModelChoiceField(site=admin.site, queryset=models.Band.objects.all(),
+                                        widget=AutocompleteWidget(attrs={'class': 'my_extra_class'}),
+                                        yaaac_opts={
+                                            "search_fields": ["^name"],
+                                            "min_chars": 3,
+                                            "suggest_by": "get_full_info",
+                                            "allow_lookup": False,
+                                        }, required=True)
+
+    class Meta:
+        model = models.BandMember
+        exclude = ()
+
+
 ## Views ##
 
 def band_member_form(request, member_id=None):
@@ -96,6 +111,14 @@ def band_member_limit_form(request, member_id=None):
 
 def band_member_extra_css(request):
     form = BandMemberExtraCSSForm(request.POST or None)
+    return render(request, 'base_form.html', {
+        'form': form,
+        'title': "Add a band member"
+    })
+
+
+def band_member_no_lookup(request):
+    form = BandMemberExtraNoLookupForm(request.POST or None)
     return render(request, 'base_form.html', {
         'form': form,
         'title': "Add a band member"
