@@ -1,7 +1,7 @@
 import os
 from distutils.core import setup
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read()
+README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
