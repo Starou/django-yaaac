@@ -7,6 +7,8 @@ from django.test.client import Client
 from . import models
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from django import VERSION
 LIVE_SERVER_CLASS = LiveServerTestCase
@@ -138,6 +140,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located((By.ID, "lookup_id_band")))
         self.assertFalse(band_search_elem.is_displayed())
 
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
@@ -181,6 +184,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         # The autocomplete field is now hidden.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
@@ -204,6 +209,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
@@ -233,6 +240,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         # The autocomplete field is now hidden.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
@@ -277,6 +286,7 @@ class YaaacLiveServerTest(LiveServerTest):
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located((By.ID, "lookup_id_band")))
         self.assertFalse(band_search_elem.is_displayed())
 
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
@@ -321,6 +331,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         # The autocomplete field is now hidden.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
@@ -345,6 +357,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         suggestion_elems[0].click()
         self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
@@ -374,6 +388,8 @@ class YaaacLiveServerTest(LiveServerTest):
 
         # The autocomplete field is now hidden.
         band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
@@ -420,6 +436,8 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertEqual(self.selenium.find_element_by_id(
             'id_bandmember_set-2-favorite_instrument').get_attribute("value"), "3")
 
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//tr[@id="bandmember_set-2"]//input[@class="yaaac_search_input"]')))
         self.assertFalse(fav_search_elem.is_displayed())
         self.assertTrue(fav_value_container.is_displayed())
         self.assertEqual(fav_value_elem.text, "Keyboards")
@@ -452,6 +470,8 @@ class YaaacLiveServerTest(LiveServerTest):
         self.assertEqual(self.selenium.find_element_by_id(
             'id_bandmember_set-3-favorite_instrument').get_attribute("value"), "2")
 
+        WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
+            (By.XPATH, '//tr[@id="bandmember_set-3"]//input[@class="yaaac_search_input"]')))
         self.assertFalse(fav_search_elem.is_displayed())
         fav_value_container = self.selenium.find_element_by_xpath(
             '//tr[@id="bandmember_set-3"]//span[@class="yaaac_value_container"]')
