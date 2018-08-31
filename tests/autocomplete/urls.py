@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from django_yaaac.manager import autocomplete
 from django.conf.urls import url
 
-from my_admin import limit_choices_site, autocomplete_site
+from .my_admin import limit_choices_site, autocomplete_site
 from autocomplete import views
 
 urlpatterns = [
