@@ -12,8 +12,8 @@ Vagrant.configure(2) do |config|
 
     yaaac.vm.provision "shell", inline: <<-SHELL
       apt-get update
-      DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential \
-      python-minimal python-dev virtualenv chromium-chromedriver xvfb
+      DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential bash-completion \
+      python-minimal python-dev virtualenv python3-dev python3-venv chromium-chromedriver xvfb
     SHELL
 
     yaaac.vm.provision "create-virtualenv-py2", type: :shell, privileged: false, inline: <<-SHELL
@@ -21,9 +21,19 @@ Vagrant.configure(2) do |config|
       virtualenv venv_py2
     SHELL
 
+    yaaac.vm.provision "create-virtualenv-py3", type: :shell, privileged: false, inline: <<-SHELL
+      cd ~
+      python3 -m venv venv_py3
+    SHELL
+
     yaaac.vm.provision "pip2-install", type: :shell, privileged: false, inline: <<-SHELL
       source ~/venv_py2/bin/activate
       pip install coverage django==1.11 selenium
+    SHELL
+
+    yaaac.vm.provision "pip3-install", type: :shell, privileged: false, inline: <<-SHELL
+      source ~/venv_py3/bin/activate
+      pip3 install coverage django==1.11 selenium
     SHELL
 
     yaaac.vm.provision "bashrc", type: :shell, privileged: false, inline: <<-SHELL
