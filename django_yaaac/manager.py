@@ -5,6 +5,7 @@ from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
+from functools import reduce
 
 
 def cache_model(f):
