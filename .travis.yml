@@ -4,6 +4,7 @@ language: python
 
 python:
   - 2.7
+  - 3.6
 
 env:
   - DJANGO_VERSION=1.9.12
@@ -15,6 +16,7 @@ install:
   - pip install -q coverage
   - pip install -q coveralls
   - pip install -q selenium
+  - pip install -q future
   - pip install .
 
 before_script:
