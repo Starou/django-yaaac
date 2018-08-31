@@ -1,3 +1,4 @@
+from builtins import str
 import json
 
 from django import VERSION as DJ_VERSION
@@ -74,7 +75,7 @@ class AutocompleteWidget(forms.HiddenInput):
 
         attrs.update({
             'class': 'yaaac_%s yaaac_pk vForeignKeyRawIdAdminField' % clean_fieldname_prefix(name),
-            'search_url': u"{search_url}{url_params}&suggest_by={suggest_by}".format(search_url=unicode(search_url),
+            'search_url': u"{search_url}{url_params}&suggest_by={suggest_by}".format(search_url=str(search_url),
                                                                                      url_params=url_params,
                                                                                      suggest_by=self.opts["suggest_by"]),
             'search_opts': json.dumps(search_opts),

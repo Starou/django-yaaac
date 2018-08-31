@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 import operator
 from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.contenttypes.models import ContentType
@@ -69,7 +71,7 @@ class AutocompleteManager(object):
             except AttributeError:
                 url = None
             return json_response({
-                "value": unicode(obj),
+                "value": str(obj),
                 "url": url,
             })
         search_fields = request.GET.get('search_fields').split(",")
