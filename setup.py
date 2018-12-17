@@ -8,13 +8,14 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-yaaac',
-    version='1.11.2',
+    version='3.0.0',
     license='BSD Licence',
     author='Stanislas Guerra',
     author_email='stanislas.guerra@gmail.com',
     description='Django application providing Ajax search capabilities.',
     long_description=README,
     url='https://github.com/Starou/django-yaaac',
+    install_requires=['future'],
     packages=['django_yaaac',
               'django_yaaac.forms'],
     package_data={
@@ -34,6 +35,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],

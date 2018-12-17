@@ -24,6 +24,14 @@ Another Ajax Auto-Complete, Yet
 *Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition
 to the *raw_id_fields* related lookup and - *cerise sur le gateau* - it is usable outside the admin.
 
+Version 3 upgrade warning
+=========================
+
+This version brings Python 3.6 compatibility with a minor regression.
+The default ``suggest_by`` is now ``__str__`` instead of ``__unicode__`` so check
+the `Django documentation <https://docs.djangoproject.com/en/1.11/topics/python3/#str-and-unicode-methods>`_
+to migrate your code.
+
 Examples
 ========
 

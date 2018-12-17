@@ -1,5 +1,6 @@
 from django import VERSION as DJ_VERSION
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 
 class InstrumentManager(models.Manager):
@@ -28,15 +29,17 @@ def can_search_instrument(instance, user):
     else:
         return user and user.is_authenticated or False
 
+
+@python_2_unicode_compatible
 class Instrument(models.Model):
     objects = InstrumentManager()
     name = models.CharField(max_length=64, unique=True)
 
     class Yaaac:
         user_passes_test = can_search_instrument
-        allows_suggest_by = ['__unicode__']
+        allows_suggest_by = ['__str__', '__unicode__']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def natural_key(self):
@@ -46,17 +49,19 @@ class Instrument(models.Model):
         return "http://en.wikipedia.org/wiki/%s" % self.name
 
 
+@python_2_unicode_compatible
 class MusicGenre(models.Model):
     objects = MusicGenreManager()
     name = models.CharField(max_length=64, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def natural_key(self):
         return (self.name,)
 
 
+@python_2_unicode_compatible
 class Band(models.Model):
     objects = BandManager()
     name = models.CharField(max_length=100, unique=True)
@@ -66,7 +71,7 @@ class Band(models.Model):
         user_passes_test = lambda instance, u: True
         allows_suggest_by = ['name', 'get_full_info']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def natural_key(self):
@@ -76,6 +81,7 @@ class Band(models.Model):
         return u"%s (%s)" % (self.name, self.genre)
 
 
+@python_2_unicode_compatible
 class BandMember(models.Model):
     objects = BandMemberManager()
     first_name = models.CharField(max_length=100)
@@ -93,7 +99,7 @@ class BandMember(models.Model):
         user_passes_test = lambda instance, u: True
         allows_suggest_by = ['get_full_name']
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s" % (self.first_name, self.last_name)
 
     def natural_key(self):

@@ -30,7 +30,7 @@ class AutocompleteModelChoiceField(ModelChoiceField):
             "min_chars": 1,
             "max_height": 300,
             "width": 300,
-            "suggest_by": "__unicode__",
+            "suggest_by": "__str__",
             "allow_lookup": True,
         }
         widget.opts.update(yaaac_opts or {})

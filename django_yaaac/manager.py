@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 import operator
 from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.contenttypes.models import ContentType
@@ -5,6 +7,7 @@ from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django_yaaac.shortcuts import json_response
 from django_yaaac.utils import lookup_dict_from_url_params
+from functools import reduce
 
 
 def cache_model(f):
@@ -68,7 +71,7 @@ class AutocompleteManager(object):
             except AttributeError:
                 url = None
             return json_response({
-                "value": unicode(obj),
+                "value": str(obj),
                 "url": url,
             })
         search_fields = request.GET.get('search_fields').split(",")
