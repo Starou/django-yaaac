@@ -36,6 +36,7 @@ class AutocompleteModelChoiceField(ModelChoiceField):
         widget.opts.update(yaaac_opts or {})
         widget.limit_choices_to = limit_choices_to or {}
 
-        ModelChoiceField.__init__(self, queryset, empty_label,
-                                  required, widget, label, initial, help_text,
-                                  to_field_name, *args, **kwargs)
+        ModelChoiceField.__init__(self, queryset, empty_label=empty_label,
+                                  required=required, widget=widget, label=label,
+                                  initial=initial, help_text=help_text,
+                                  to_field_name=to_field_name, **kwargs)
