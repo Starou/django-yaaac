@@ -1,5 +1,9 @@
-include LICENCE.txt
-include README.rst
-recursive-include django_yaaac/static *
-recursive-include examples *
-recursive-exclude * .DS_Store
+include LICENSE
+graft examples
+graft tests
+exclude tests/coveralls.yaml
+exclude tests/.coverage
+exclude tests/geckodriver.log
+global-exclude *.sqlite
+global-exclude *.pyc
+global-exclude .DS_Store
