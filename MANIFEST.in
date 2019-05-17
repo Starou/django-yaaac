@@ -4,5 +4,6 @@ graft tests
 exclude tests/coveralls.yaml
 exclude tests/.coverage
 exclude tests/geckodriver.log
+global-exclude *.sqlite
 global-exclude *.pyc
 global-exclude .DS_Store
