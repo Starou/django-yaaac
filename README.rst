@@ -21,8 +21,7 @@ Another Ajax Auto-Complete, Yet
     :alt: Travis C.I.
 
 
-*Yaaac* is lightweight Django application providing Ajax search to admin foreign-key form fields in addition
-to the *raw_id_fields* related lookup and - *cerise sur le gateau* - it is usable outside the admin.
+*Yaaac* is lightweight Django application providing Ajax search to foreign-key form fields.
 
 Version 3 upgrade warning
 =========================
@@ -32,37 +31,19 @@ The default ``suggest_by`` is now ``__str__`` instead of ``__unicode__`` so chec
 the `Django documentation <https://docs.djangoproject.com/en/1.11/topics/python3/#str-and-unicode-methods>`_
 to migrate your code.
 
-Examples
-========
+Django 2-2 and Version 3.2 important note
+=========================================
 
-In the admin
-------------
+Since Django-2.2 the way `asserts are sorted has been completely rewritten <https://docs.djangoproject.com/en/2.2/releases/2.2/#merging-of-form-media-assets>`_
+and as the result breaks this lib in the admin. The fix was to embbed jQuery and set the
+dependency in the widgets Media classes which may leads to other regressions.
 
-Configure the admin form to enable Ajax search where you usually use *raw_id_fields*.
-
-.. image:: examples/screenshot-admin-1.png
-    :alt: Ajax search field
-
-Start typing to select a value from the suggestion.
-
-.. image:: examples/screenshot-admin-2.png
-    :alt: Ajax search in progress
-
-The selected object is displayed using the unicode value. You can reset the field to choose another one.
-
-.. image:: examples/screenshot-admin-3.png
-    :alt: Ajax search completed
-
-In inlines as well.
-
-.. image:: examples/screenshot-admin-inline.png
-    :alt: Ajax search in inlines
+Since a `autocomplete solution <https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.autocomplete_fields>`_
+is now built-in Django admin, the support for the admin has been removed.
 
 
 Installation
 ============
-
-**The current version (1.11.x) supports Django 1.9+.**
 
 Install the app from the source::
 
@@ -103,16 +84,14 @@ Usage
 Forms
 -----
 
-What you need to do is to declare a custom *ModelForm* and use it in your *ModelAdmin*:
+What you need to do is to declare a custom *ModelForm*:
 
 .. code-block:: python
 
     from django import forms
     from django.contrib import admin
-    from django.contrib.admin.templatetags.admin_static import static
-    from django.template import RequestContext
     from django_yaaac.forms.fields import AutocompleteModelChoiceField
-    from test_app import models
+    from . import models
 
 
     class BandMemberForm(forms.ModelForm):
@@ -129,13 +108,9 @@ What you need to do is to declare a custom *ModelForm* and use it in your *Model
         class Meta:
             model = models.BandMember
 
-
-    class BandMemberAdmin(admin.ModelAdmin):
-        form = BandMemberForm
-
         class Media:
-            # You need jQuery.
-            js = (static('js/jquery.min.js'), )
+            # You need jQuery. Don't forget to call {{ form.media }} in your template.
+            js = ('js/jquery.min.js', )
 
 
     admin.site.register(models.BandMember, BandMemberAdmin)
@@ -146,14 +121,6 @@ as in Django Admin (^, $ etc).
 Extra options *min_chars*, *max_height* and *width* are the counter-part of *minChars*, *maxHeight* and *width*
 in `Autocomplete options <https://github.com/devbridge/jQuery-Autocomplete#api>`_.
 
-
-Do not forget to add *jQuery* in your template (using *ModelAdmin.Media.js* in the example above).
-Outside the admin, you have to explicitly call the yaaac static files like that::
-
-    <head>
-      {{ form.media }}
-    </head>
-
 *suggest_by* is optional. It can be a field or a method of the model.
 By default, suggestions are shown using *__unicode__* method.
 
@@ -162,12 +129,14 @@ If your model define a ``get_absolute_url()`` method, the label is a link to tha
 Models
 ------
 
-For security reasons you must open the search view on the models like this:
+The ``Yaaac`` class must defines the following:
+
+- ``user_passes_test`` is a class method that takes a user and return True or False.
+- ``allows_suggest_by`` is a list of model fields or methods that can used as return value by the search view.
 
 .. code-block:: python
 
     class BandMember(models.Model):
-        plain_stupid_password = models.CharField(max_length=4)
         first_name = models.CharField(max_length=100)
         last_name = models.CharField(max_length=100)
         band = models.ForeignKey("Band", null=True, blank=True)
@@ -185,12 +154,6 @@ For security reasons you must open the search view on the models like this:
 
         def get_full_name(self):
             return u"%s %s" % (self.first_name, self.last_name)
-
-
-The ``Yaaac`` class must defines the following:
-
-- ``user_passes_test`` is a class method that takes a user and return True or False.
-- ``allows_suggest_by`` is a list of model fields or methods that can used as return value by the search view.
 
 Tuning
 ======

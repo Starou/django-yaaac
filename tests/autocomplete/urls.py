@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 from django_yaaac.manager import autocomplete
 from django.conf.urls import url
+from django.contrib import admin
 
-from .my_admin import limit_choices_site, autocomplete_site
 from autocomplete import views
 
 urlpatterns = [
-    url(r'^limit-choices-admin/', limit_choices_site.urls),
-    url(r'^admin/', autocomplete_site.urls),
+    url('^admin/', admin.site.urls),
     url(r'^yaaac/', autocomplete.urls),
     url(r'^band-member-form/$', views.band_member_form),
     url(r'^band-member-form/(?P<member_id>\d+)/$', views.band_member_form),
