@@ -6,5 +6,6 @@ build
 tests/coveralls.yaml
 tests/geckodriver.log
 tests/.coverage
+tests/htmlcov
 .ropeproject
 .vagrant
