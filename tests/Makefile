@@ -1,15 +1,19 @@
-headless-tests:
-	@PATH=${PATH}:/usr/lib/chromium-browser/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 python runtests.py
-
 tests:
+ifeq (${USER},vagrant)
+	@PATH=${PATH}:/usr/lib/chromium-browser/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 python runtests.py
+else
 	@PYTHONPATH=..:${PYTHONPATH} python runtests.py
-
-coveralls:
-	@PYTHONPATH=..:${PYTHONPATH} coverage run --rcfile=coveragerc runtests.py
-	@coveralls -y coveralls.yaml -d .coverage
+endif
 
 coverage-report: coverage
 	@coverage report -m
 
+coverage-report-html: coverage
+	@coverage html
+
 coverage:
+ifeq (${USER},vagrant)
+	@PATH=${PATH}:/usr/lib/chromium-browser/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 coverage run --rcfile=coveragerc runtests.py
+else
 	@PYTHONPATH=..:${PYTHONPATH} coverage run --rcfile=coveragerc runtests.py
+endif
