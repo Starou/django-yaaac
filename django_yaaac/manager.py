@@ -4,8 +4,7 @@ import operator
 from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.http import HttpResponseNotFound, HttpResponseForbidden
-from django_yaaac.shortcuts import json_response
+from django.http import HttpResponseNotFound, HttpResponseForbidden, JsonResponse
 from django_yaaac.utils import lookup_dict_from_url_params
 from functools import reduce
 
@@ -70,7 +69,7 @@ class AutocompleteManager(object):
                 url = obj.get_absolute_url()
             except AttributeError:
                 url = None
-            return json_response({
+            return JsonResponse({
                 "value": str(obj),
                 "url": url,
             })
@@ -98,8 +97,8 @@ class AutocompleteManager(object):
             result = [(o.pk, getattr(o, suggest_by)()) for o in result]
         result = result or [('', '')]
         suggestions = [{"value": r[1], "data": r[0]} for r in result]
-        return json_response({'query': request.GET.get('query'),
-                              'suggestions': suggestions})
+        return JsonResponse({'query': request.GET.get('query'),
+                             'suggestions': suggestions})
 
     # From https://github.com/django/django/blob/master/django/contrib/admin/options.py
     # without the use_distinct calculation.
@@ -132,5 +131,6 @@ class AutocompleteManager(object):
             else:
                 queryset_id += 1
         return queryset_id
+
 
 autocomplete = AutocompleteManager()
