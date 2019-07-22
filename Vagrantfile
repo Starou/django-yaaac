@@ -33,7 +33,7 @@ Vagrant.configure(2) do |config|
 
     yaaac.vm.provision "pip3-install", type: :shell, privileged: false, inline: <<-SHELL
       source ~/venv_py3/bin/activate
-      pip3 install coverage django==1.11.15 future selenium
+      pip3 install coverage django==2.2.3 future selenium
     SHELL
 
     yaaac.vm.provision "bashrc", type: :shell, privileged: false, inline: <<-SHELL
