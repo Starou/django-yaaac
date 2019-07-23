@@ -34,7 +34,7 @@ to migrate your code.
 Django 2-2 and Version 3.2 important note
 =========================================
 
-Since Django-2.2 the way `asserts are sorted has been completely rewritten <https://docs.djangoproject.com/en/2.2/releases/2.2/#merging-of-form-media-assets>`_
+Since Django-2.2 the way `assets are sorted has been completely rewritten <https://docs.djangoproject.com/en/2.2/releases/2.2/#merging-of-form-media-assets>`_
 and as the result breaks this lib in the admin. The fix was to embbed jQuery and set the
 dependency in the widgets Media classes which may leads to other regressions.
 
