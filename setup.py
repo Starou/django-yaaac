@@ -23,7 +23,6 @@ setup(
         'Source Code': 'https://github.com/Starou/django-yaaac',
         'Issue Tracker': 'https://github.com/Starou/django-yaaac/issues',
     },
-    install_requires=['future'],
     packages=[
         'django_yaaac',
         'django_yaaac.forms',

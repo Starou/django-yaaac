@@ -13,12 +13,6 @@ addons:
 
 matrix:
   include:
-  - python: 2.7
-    env: DJANGO_VERSION=1.9.13
-  - python: 2.7
-    env: DJANGO_VERSION=1.10.8
-  - python: 2.7
-    env: DJANGO_VERSION=1.11.22
   - python: 3.6
     env: DJANGO_VERSION=1.9.13
   - python: 3.6
@@ -39,7 +33,6 @@ install:
   - pip install -q coverage
   - pip install -q coveralls
   - pip install -q selenium
-  - pip install -q future
   - pip install .
 
 before_script:

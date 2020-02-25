@@ -1,6 +1,5 @@
 from django import VERSION as DJ_VERSION
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 
 
 class InstrumentManager(models.Manager):
@@ -30,7 +29,6 @@ def can_search_instrument(instance, user):
         return user and user.is_authenticated or False
 
 
-@python_2_unicode_compatible
 class Instrument(models.Model):
     objects = InstrumentManager()
     name = models.CharField(max_length=64, unique=True)
@@ -49,7 +47,6 @@ class Instrument(models.Model):
         return "http://en.wikipedia.org/wiki/%s" % self.name
 
 
-@python_2_unicode_compatible
 class MusicGenre(models.Model):
     objects = MusicGenreManager()
     name = models.CharField(max_length=64, unique=True)
@@ -61,7 +58,6 @@ class MusicGenre(models.Model):
         return (self.name,)
 
 
-@python_2_unicode_compatible
 class Band(models.Model):
     objects = BandManager()
     name = models.CharField(max_length=100, unique=True)
@@ -81,7 +77,6 @@ class Band(models.Model):
         return u"%s (%s)" % (self.name, self.genre)
 
 
-@python_2_unicode_compatible
 class BandMember(models.Model):
     objects = BandMemberManager()
     first_name = models.CharField(max_length=100)
