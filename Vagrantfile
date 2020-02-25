@@ -3,7 +3,7 @@
 
 Vagrant.configure(2) do |config|
   config.vm.define "yaaac", primary: true do |yaaac|
-    yaaac.vm.box = "bento/ubuntu-16.04"
+    yaaac.vm.box = "ubuntu/bionic64"
     yaaac.vm.hostname = "yaaac"
 
     yaaac.vm.provider "virtualbox" do |vb|
