@@ -13,12 +13,6 @@ addons:
 
 matrix:
   include:
-  - python: 2.7
-    env: DJANGO_VERSION=1.9.13
-  - python: 2.7
-    env: DJANGO_VERSION=1.10.8
-  - python: 2.7
-    env: DJANGO_VERSION=1.11.22
   - python: 3.6
     env: DJANGO_VERSION=1.9.13
   - python: 3.6
@@ -30,14 +24,15 @@ matrix:
   - python: 3.6
     env: DJANGO_VERSION=2.1.10
   - python: 3.6
-    env: DJANGO_VERSION=2.2.3
+    env: DJANGO_VERSION=2.2.9
+  - python: 3.6
+    env: DJANGO_VERSION=3.0.3
 
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install -q coverage
   - pip install -q coveralls
   - pip install -q selenium
-  - pip install -q future
   - pip install .
 
 before_script:

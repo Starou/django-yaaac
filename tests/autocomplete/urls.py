@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from django_yaaac.manager import autocomplete
 from django.conf.urls import url
 from django.contrib import admin
