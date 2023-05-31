@@ -1,12 +1,13 @@
 from builtins import str
 from builtins import object
 import operator
+from functools import reduce
 from django.contrib.admin.views.main import TO_FIELD_VAR
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseForbidden, JsonResponse
+from django.urls import re_path
 from django_yaaac.utils import lookup_dict_from_url_params
-from functools import reduce
 
 
 def cache_model(f):
@@ -47,11 +48,10 @@ class AutocompleteManager(object):
         self.registered_querysets = {}
 
     def get_urls(self):
-        from django.conf.urls import url
         return [
-            url(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
-                self.search, name='search_with_queryset_id'),
-            url(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
+            re_path(r'^(?P<app>\w+)/(?P<model>\w+)/(?P<queryset_id>\d+)/search/$',
+                    self.search, name='search_with_queryset_id'),
+            re_path(r'^(?P<app>\w+)/(?P<model>\w+)/search/$', self.search, name='search'),
         ]
 
     @property

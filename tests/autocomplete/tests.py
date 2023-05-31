@@ -1,7 +1,7 @@
 import json
 import time
 from django.contrib.admin.views.main import TO_FIELD_VAR
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.test import TestCase, LiveServerTestCase
 from django.test import override_settings
 from django.test.client import Client
@@ -28,11 +28,11 @@ class AutocompleteTest(TestCase):
 
     def test_search(self):
         response = self.client.get("/yaaac/autocomplete/band/search/?%s=id&query=ge&search_fields=^name&suggest_by=name" % TO_FIELD_VAR)
-        self.assertEqual(json.loads(force_text(response.content)),
+        self.assertEqual(json.loads(force_str(response.content)),
                          {u'query': u'ge', u'suggestions': [{u'data': 1, u'value': u'Genesis'}]})
 
         response = self.client.get("/yaaac/autocomplete/band/search/?%s=id&query=ge&search_fields=name&suggest_by=get_full_info" % TO_FIELD_VAR)
-        self.assertEqual(json.loads(force_text(response.content)),
+        self.assertEqual(json.loads(force_str(response.content)),
                          {u'query': u'ge', u'suggestions': [
                              {u'data': 1, u'value': u'Genesis (Rock)'},
                              {u'data': 6, u'value': u'The Bee Gees (Cheese)'},
@@ -40,7 +40,7 @@ class AutocompleteTest(TestCase):
 
         response = self.client.get(
             "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph&search_fields=first_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-        self.assertEqual(json.loads(force_text(response.content)),
+        self.assertEqual(json.loads(force_str(response.content)),
                          {u'query': u'ph', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
                              {u'data': 4, u'value': u'Phil Spector'},
@@ -48,7 +48,7 @@ class AutocompleteTest(TestCase):
 
         response = self.client.get(
             "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-        self.assertEqual(json.loads(force_text(response.content)),
+        self.assertEqual(json.loads(force_str(response.content)),
                          {u'query': u'ph', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
                              {u'data': 4, u'value': u'Phil Spector'},
@@ -56,14 +56,14 @@ class AutocompleteTest(TestCase):
 
         response = self.client.get(
             "/yaaac/autocomplete/bandmember/search/?%s=id&query=ph col&search_fields=first_name,last_name&suggest_by=get_full_name" % TO_FIELD_VAR)
-        self.assertEqual(json.loads(force_text(response.content)),
+        self.assertEqual(json.loads(force_str(response.content)),
                          {u'query': u'ph col', u'suggestions': [
                              {u'data': 1, u'value': u'Phil Collins'},
                          ]})
 
     def test_search_with_pk(self):
         response = self.client.get("/yaaac/autocomplete/band/search/?pk=1")
-        self.assertEqual(json.loads(force_text(response.content)), {'value': 'Genesis', 'url': None})
+        self.assertEqual(json.loads(force_str(response.content)), {'value': 'Genesis', 'url': None})
 
     def test_search_not_found(self):
         response = self.client.get("/yaaac/auth/user/search/?%s=id&query=super&search_fields=^username&suggest_by=password" % TO_FIELD_VAR)
