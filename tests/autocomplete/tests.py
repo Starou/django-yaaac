@@ -115,12 +115,12 @@ class LiveServerTest(LIVE_SERVER_CLASS):
 
     def admin_login(self, username, password, login_url='/admin/'):
         self.selenium.get('%s%s' % (self.live_server_url, login_url))
-        username_input = self.selenium.find_element_by_name('username')
+        username_input = self.selenium.find_element("name", 'username')
         username_input.send_keys(username)
-        password_input = self.selenium.find_element_by_name('password')
+        password_input = self.selenium.find_element("name", 'password')
         password_input.send_keys(password)
         login_text = 'Log in'
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element("xpath",
             '//input[@value="%s"]' % login_text).click()
         self.wait_page_loaded(By.CLASS_NAME, "dashboard")
 
@@ -131,28 +131,28 @@ class YaaacLiveServerTest(LiveServerTest):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
         self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
 
-        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        band_search_elem = self.selenium.find_element("xpath", '//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
         band_search_elem.send_keys("the ")
         self.wait_for_ajax()
-        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        suggestion_elems = self.selenium.find_elements('class name', 'autocomplete-suggestion')
         self.assertEqual(len(suggestion_elems), 3)
         self.assertEqual([elem.text for elem in suggestion_elems],
                          [u"The Rolling Stones (Blues/Rock)", u"The Stone Roses (Rock)", "The Bee Gees (Cheese)"])
 
         suggestion_elems[0].click()
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "2")
         WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located((By.ID, "lookup_id_band")))
         self.assertFalse(band_search_elem.is_displayed())
 
-        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        band_value_container = self.selenium.find_element("class name", 'yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
-        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        band_value_elem = self.selenium.find_element("class name", 'yaaac_value')
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
         # Clear the choice.
-        self.selenium.find_element_by_class_name('yaaac_clear_value').click()
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "")
+        self.selenium.find_element("class name", 'yaaac_clear_value').click()
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "")
         self.assertTrue(band_search_elem.is_displayed())
         self.assertFalse(band_value_container.is_displayed())
 
@@ -161,13 +161,13 @@ class YaaacLiveServerTest(LiveServerTest):
         self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
 
         # The autocomplete field is not visible.
-        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        band_search_elem = self.selenium.find_element("xpath", '//input[@class="yaaac_search_input"]')
         self.assertFalse(band_search_elem.is_displayed())
 
         # But the label is.
-        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        band_value_container = self.selenium.find_element("class name", 'yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
-        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        band_value_elem = self.selenium.find_element("class name", 'yaaac_value')
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
     def test_foreign_key_related_lookup(self):
@@ -176,53 +176,53 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.get('%s/band-member-form/%d/' % (self.live_server_url, mick.pk))
         main_window = self.selenium.current_window_handle
-        self.selenium.find_element_by_class_name('yaaac_lookup').click()
+        self.selenium.find_element("class name", 'yaaac_lookup').click()
 
         self.wait_for_popup()
         self.selenium.switch_to.window(self.selenium.window_handles[1])
-        self.selenium.find_element_by_link_text("SuperHeavy").click()
+        self.selenium.find_element("link text", "SuperHeavy").click()
         self.selenium.switch_to.window(main_window)
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.
-        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        band_search_elem = self.selenium.find_element("xpath", '//input[@class="yaaac_search_input"]')
         WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
             (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
-        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        band_value_container = self.selenium.find_element("class name", 'yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
-        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        band_value_elem = self.selenium.find_element("class name", 'yaaac_value')
         self.assertEqual(band_value_elem.text, "SuperHeavy")
 
     def test_foreign_key_limit_choices_autocomplete(self):
         mick = models.BandMember.objects.create(first_name="Mick", last_name="Jagger")
         self.selenium.get('%s/band-member-form/limit-choices/%d/' % (self.live_server_url, mick.pk))
 
-        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        band_search_elem = self.selenium.find_element("xpath", '//input[@class="yaaac_search_input"]')
         self.assertTrue(band_search_elem.is_displayed())
         band_search_elem.send_keys("the ")
         self.wait_for_ajax()
-        suggestion_elems = self.selenium.find_elements_by_class_name('autocomplete-suggestion')
+        suggestion_elems = self.selenium.find_elements('class name', 'autocomplete-suggestion')
         self.assertEqual(len(suggestion_elems), 2)
         self.assertEqual([elem.text for elem in suggestion_elems],
                          [u"The Rolling Stones", u"The Stone Roses"])
 
         suggestion_elems[0].click()
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "2")
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "2")
         WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
             (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
-        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        band_value_container = self.selenium.find_element("class name", 'yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
-        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        band_value_elem = self.selenium.find_element("class name", 'yaaac_value')
         self.assertEqual(band_value_elem.text, "The Rolling Stones")
 
         # Clear the choice.
-        self.selenium.find_element_by_class_name('yaaac_clear_value').click()
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "")
+        self.selenium.find_element("class name", 'yaaac_clear_value').click()
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "")
         self.assertTrue(band_search_elem.is_displayed())
         self.assertFalse(band_value_container.is_displayed())
 
@@ -232,34 +232,34 @@ class YaaacLiveServerTest(LiveServerTest):
 
         self.selenium.get('%s/band-member-form/limit-choices/%d/' % (self.live_server_url, mick.pk))
         main_window = self.selenium.current_window_handle
-        self.selenium.find_element_by_class_name('yaaac_lookup').click()
+        self.selenium.find_element("class name", 'yaaac_lookup').click()
 
         self.wait_for_popup()
         self.selenium.switch_to.window(self.selenium.window_handles[1])
-        self.selenium.find_element_by_link_text("SuperHeavy").click()
+        self.selenium.find_element("link text", "SuperHeavy").click()
         self.selenium.switch_to.window(main_window)
-        self.assertEqual(self.selenium.find_element_by_id('id_band').get_attribute("value"), "4")
+        self.assertEqual(self.selenium.find_element("id", 'id_band').get_attribute("value"), "4")
 
         # The autocomplete field is now hidden.
-        band_search_elem = self.selenium.find_element_by_xpath('//input[@class="yaaac_search_input"]')
+        band_search_elem = self.selenium.find_element("xpath", '//input[@class="yaaac_search_input"]')
         WebDriverWait(self.selenium, 2).until(EC.invisibility_of_element_located(
             (By.XPATH, '//input[@class="yaaac_search_input"]')))
         self.assertFalse(band_search_elem.is_displayed())
 
         # And the label is shown.
-        band_value_container = self.selenium.find_element_by_class_name('yaaac_value_container')
+        band_value_container = self.selenium.find_element("class name", 'yaaac_value_container')
         self.assertTrue(band_value_container.is_displayed())
-        band_value_elem = self.selenium.find_element_by_class_name('yaaac_value')
+        band_value_elem = self.selenium.find_element("class name", 'yaaac_value')
         self.assertEqual(band_value_elem.text, "SuperHeavy")
 
     def test_extra_css(self):
         self.admin_login("super", "secret", login_url='/admin/')
         self.selenium.get('%s/band-member-form/extra-css/' % self.live_server_url)
-        container = self.selenium.find_element_by_class_name('yaaac_container')
+        container = self.selenium.find_element("class name", 'yaaac_container')
         self.assertEqual(container.get_attribute('class'), u'yaaac_container my_extra_class')
 
     def test_no_lookup(self):
         from selenium.common.exceptions import NoSuchElementException
         self.admin_login("super", "secret", login_url='/admin/')
         self.selenium.get('%s/band-member-form/no-lookup/' % self.live_server_url)
-        self.assertRaises(NoSuchElementException, self.selenium.find_element_by_class_name, 'yaaac_lookup')
+        self.assertRaises(NoSuchElementException, self.selenium.find_element, 'class name', 'yaaac_lookup')
