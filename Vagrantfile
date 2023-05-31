@@ -3,7 +3,7 @@
 
 Vagrant.configure(2) do |config|
   config.vm.define "yaaac", primary: true do |yaaac|
-    yaaac.vm.box = "ubuntu/bionic64"
+    yaaac.vm.box = "debian/bullseye64"
     yaaac.vm.hostname = "yaaac"
 
     yaaac.vm.provider "virtualbox" do |vb|
@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
     yaaac.vm.provision "shell", inline: <<-SHELL
       apt-get update
       DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential bash-completion \
-      python3-dev python3-venv chromium-chromedriver xvfb
+      python3-venv chromium-driver xvfb
     SHELL
 
     yaaac.vm.provision "create-virtualenv-py3", type: :shell, privileged: false, inline: <<-SHELL
@@ -23,7 +23,7 @@ Vagrant.configure(2) do |config|
 
     yaaac.vm.provision "pip3-install", type: :shell, privileged: false, inline: <<-SHELL
       source ~/venv_py3/bin/activate
-      pip3 install coverage django==3.0.3 selenium
+      pip3 install coverage django==4.0.10 selenium
     SHELL
 
     yaaac.vm.provision "bashrc", type: :shell, privileged: false, inline: <<-SHELL

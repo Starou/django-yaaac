@@ -1,6 +1,6 @@
 tests:
 ifeq (${USER},vagrant)
-	@PATH=${PATH}:/usr/lib/chromium-browser/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 python runtests.py
+	@PATH=${PATH}:/usr/lib/chromium/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 python runtests.py
 else
 	@PYTHONPATH=..:${PYTHONPATH} python runtests.py
 endif
@@ -13,7 +13,7 @@ coverage-report-html: coverage
 
 coverage:
 ifeq (${USER},vagrant)
-	@PATH=${PATH}:/usr/lib/chromium-browser/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 coverage run --rcfile=coveragerc runtests.py
+	@PATH=${PATH}:/usr/lib/chromium/ DISPLAY=:99 PYTHONPATH=..:${PYTHONPATH} xvfb-run -n 99 coverage run --rcfile=coveragerc runtests.py
 else
 	@PYTHONPATH=..:${PYTHONPATH} coverage run --rcfile=coveragerc runtests.py
 endif
